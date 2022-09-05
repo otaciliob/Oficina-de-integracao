@@ -16,24 +16,23 @@ import static org.junit.Assert.*;
  * @author Aluno
  */
 public class teste {
-    
-    @Test
+
+    /*@Test
     public teste() {
         assertTrue(true);
-    }
-    
+    }*/
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -41,7 +40,9 @@ public class teste {
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
-    // @Test
-    // public void hello() {}
-    
+    @Test
+    public void hello() {
+        assertTrue(true);
+    }
+
 }
