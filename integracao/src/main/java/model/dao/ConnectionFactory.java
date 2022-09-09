@@ -23,7 +23,7 @@ public class ConnectionFactory {
     private static final String DRIVE ="com.mysql.cj.jdbc.Driver";
     private static final String URL ="jdbc:mysql://localhost:3306/universidade";
     private static final String USER ="root";
-    private static final String PASS ="barbieri07";
+    private static final String PASS ="";
     //</editor-fold>
     
     public static Connection getConnection(){
