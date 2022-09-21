@@ -1,21 +1,21 @@
 package model.beans;
 
-public class Cliente {
+public class Leitor {
     
-    private String rg;
+    private int rg;
     private String nome;
     private String email;
 
-    public Cliente() {
+    public Leitor() {
     }
 
-    public Cliente(String rg, String nome, String email) {
+    public Leitor(int rg, String nome, String email) {
         this.rg = rg;
         this.nome = nome;
         this.email = email;
     }
 
-    public String getRg() {
+    public int getRg() {
         return rg;
     }
 
@@ -27,7 +27,7 @@ public class Cliente {
         return email;
     }
 
-    public void setRg(String rg) {
+    public void setRg(int rg) {
         this.rg = rg;
     }
 

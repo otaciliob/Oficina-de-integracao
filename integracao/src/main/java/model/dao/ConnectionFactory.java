@@ -21,7 +21,7 @@ public class ConnectionFactory {
     //database connect config
     //<editor-fold defaultstate="collapsed">
     private static final String DRIVE ="com.mysql.cj.jdbc.Driver";
-    private static final String URL ="jdbc:mysql://localhost:3306/universidade";
+    private static final String URL ="jdbc:mysql://localhost:3306/biblioteca";
     private static final String USER ="root";
     private static final String PASS ="barbieri07";
     //</editor-fold>
