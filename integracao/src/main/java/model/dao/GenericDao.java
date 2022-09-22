@@ -26,7 +26,7 @@ public class GenericDao {
         return rs = stmt.executeQuery();
     }
 
-    public static ResultSet readForRA(PreparedStatement stmt, Connection con) {
+    public static ResultSet readFor(PreparedStatement stmt, Connection con) {
 
         ResultSet rs = null;
 
@@ -40,7 +40,7 @@ public class GenericDao {
         return rs;
     }
 
-    public void update(PreparedStatement stmt, Connection con) {
+    public static void update(PreparedStatement stmt, Connection con) {
 
         try {
             stmt.executeUpdate();
@@ -52,7 +52,7 @@ public class GenericDao {
 
     }
 
-    public void delete(PreparedStatement stmt, Connection con) {
+    public static void delete(PreparedStatement stmt, Connection con) {
 
         try {
             stmt.executeUpdate();
