@@ -41,7 +41,7 @@ public class LeitorDao extends GenericDao {
         
         try {
             stmt = con.prepareStatement("SELECT * FROM leitor");
-            GenericDao.read(stmt, con);
+            rs = GenericDao.read(stmt, con);
             while (rs.next()) {
                 Leitor l = new Leitor();
                 l.setRg(rs.getInt("leitor_rg"));
@@ -69,7 +69,7 @@ public class LeitorDao extends GenericDao {
             stmt = con.prepareStatement("SELECT * FROM leitor WHERE leitor_nome LIKE '%?%'");
             stmt.setString(1, nome);
             
-            GenericDao.read(stmt, con);
+            rs = GenericDao.read(stmt, con);
             while (rs.next()) {
                 Leitor l = new Leitor();
                 l.setRg(rs.getInt("leitor_rg"));
@@ -97,7 +97,7 @@ public class LeitorDao extends GenericDao {
             stmt = con.prepareStatement("SELECT * FROM leitor WHERE leitor_rg = ?");
             stmt.setInt(1, rg);
             
-            GenericDao.read(stmt, con);
+            rs = GenericDao.read(stmt, con);
             while (rs.next()) {
                 Leitor l = new Leitor();
                 l.setRg(rs.getInt("leitor_rg"));
@@ -115,19 +115,19 @@ public class LeitorDao extends GenericDao {
         return leitores;
     }
     
-    public void update(Leitor l) {
+    public void update(Leitor l,int rg) {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
         try {
             stmt = con.prepareStatement(
-                "UPDATE leitor SET leitor_rg = ?,leitor_nome = ?,leitor_email = ?, WHERE leitor_rg = ?"
+                "UPDATE leitor SET leitor_rg = ?,leitor_nome = ?,leitor_email = ? WHERE leitor_rg = ?"
             );
             stmt.setInt(1, l.getRg());
             stmt.setString(2, l.getNome());
             stmt.setString(3, l.getEmail());
-            stmt.setInt(4, l.getRg());
+            stmt.setInt(4, rg);
             
             GenericDao.update(stmt, con);
             JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
