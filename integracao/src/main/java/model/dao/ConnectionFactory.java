@@ -39,6 +39,20 @@ public class ConnectionFactory {
         
     }
     
+    public static Connection getConnection(String teste){
+        
+        try {
+            Class.forName(DRIVE);
+            
+            return DriverManager.getConnection(teste, USER, PASS);
+            
+        } catch (ClassNotFoundException | SQLException ex) {
+            throw new RuntimeException("Erro de conecao: ",ex);
+        }
+        
+    }    
+    
+    
     public static void closeConnection(Connection con){
         
         try {

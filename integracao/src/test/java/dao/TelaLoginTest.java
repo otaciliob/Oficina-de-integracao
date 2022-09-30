@@ -18,55 +18,56 @@ import org.junit.Test;
 public class TelaLoginTest {
 
     static Connection conexao;
-    LoginDao dao = new LoginDao();
     private final static String user = "login";
     private final static String pass = "senha";
-
+    private static final String url ="jdbc:mysql://localhost:3306/teste";
+    LoginDao dao = new LoginDao(url);
+    
     @Before
     public void setup() throws SQLException {
-        conexao = ConnectionFactory.getConnection();
+        conexao = ConnectionFactory.getConnection(url);
         String sqllogininsert = "INSERT INTO login VALUES ('login','senha')";
         PreparedStatement ps = conexao.prepareStatement(sqllogininsert);
         ps.executeUpdate(sqllogininsert);
     }
 
     @Test
-    public void testLogin() {
+    public void testLoginCorreto() {
         assertEquals(true, dao.login(user, pass));
     }
 
     @Test
-    public void testLogin02() {
+    public void testLoginUsuarioESenhaIncorretos() {
         assertEquals(false, dao.login("no", "no"));
     }
 
     @Test
-    public void testLogin03() {
+    public void testLoginUsuarioVazioSenhaCorreta() {
         assertEquals(false, dao.login("", pass));
     }
 
     @Test
-    public void testLogin04() {
+    public void testLoginUsuarioCorretoSenhaVazia() {
         assertEquals(false, dao.login(user, ""));
     }
 
     @Test
-    public void testLogin05() {
+    public void testLoginCorreto02() {
         assertEquals(true, dao.login("login", "senha"));
     }
 
     @Test
-    public void testLogin06() {
+    public void testLoginUsuarioIncorretoESenhaCorreta() {
         assertEquals(false, dao.login("user", "senha"));
     }
 
     @Test
-    public void testLogin07() {
+    public void testLoginCorretoESenhaIncorreta() {
         assertEquals(false, dao.login("login", "123456"));
     }
 
     @Test
-    public void testLogin08() throws SQLException {
+    public void testLoginComNovoCadastroDeNovoUsuarioESenhaCorreto() throws SQLException {
         String sqllogininsert = "INSERT INTO login VALUES ('teste','123')";
         PreparedStatement ps = conexao.prepareStatement(sqllogininsert);
         ps.executeUpdate(sqllogininsert);
@@ -79,12 +80,12 @@ public class TelaLoginTest {
     }
 
     @Test
-    public void testLogin09() {
+    public void testLoginComUsuarioCorretoESenhaVazia() {
         assertEquals(false, dao.login("login", ""));
     }
 
     @Test
-    public void testLogin10() throws SQLException {
+    public void testLoginComNovoCadastroDeNovoUsuarioESenhaIncorreto() throws SQLException {
         String sqllogininsert = "INSERT INTO login VALUES ('teste','123')";
         PreparedStatement ps = conexao.prepareStatement(sqllogininsert);
         ps.executeUpdate(sqllogininsert);

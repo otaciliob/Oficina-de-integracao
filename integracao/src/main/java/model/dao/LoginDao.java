@@ -24,6 +24,10 @@ public class LoginDao {
     public LoginDao() {
         conexao = ConnectionFactory.getConnection();
     }
+    
+    public LoginDao(String teste) {
+        conexao = ConnectionFactory.getConnection(teste);
+    }
 
     public boolean login(String user, String pass) {
         try {
