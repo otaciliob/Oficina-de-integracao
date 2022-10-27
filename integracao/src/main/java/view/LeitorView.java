@@ -177,7 +177,7 @@ public class LeitorView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jb_cadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_cadastrarActionPerformed
-        if (!(txt_rg.getText().isBlank()) && !(txt_nome.getText().isBlank())) {
+        if (!(txt_rg.getText().isEmpty()) && !(txt_nome.getText().isEmpty())) {
             dao.create(new Leitor(
                     Integer.parseInt(txt_rg.getText()),
                     txt_nome.getText(),
@@ -228,7 +228,7 @@ public class LeitorView extends javax.swing.JFrame {
     }//GEN-LAST:event_jb_deletarActionPerformed
 
     private void jb_consultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_consultarActionPerformed
-        if (!txt_rg.getText().isBlank())
+        if (!txt_rg.getText().isEmpty())
             readJTableFor(Integer.parseInt(txt_rg.getText()));
     }//GEN-LAST:event_jb_consultarActionPerformed
 
