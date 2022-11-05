@@ -1,15 +1,17 @@
 package model.beans;
 
+import java.sql.Date;
+
 public class Emprestimo {
     
     private String livro_id;
     private int leitor_rg;
-    private String data_devolucao;
+    private Date data_devolucao;
 
     public Emprestimo() {
     }
 
-    public Emprestimo(String livro_id, int leitor_rg, String data_devolucao) {
+    public Emprestimo(String livro_id, int leitor_rg, Date data_devolucao) {
         this.livro_id = livro_id;
         this.leitor_rg = leitor_rg;
         this.data_devolucao = data_devolucao;
@@ -23,7 +25,7 @@ public class Emprestimo {
         return leitor_rg;
     }
 
-    public String getData_devolucao() {
+    public Date getData_devolucao() {
         return data_devolucao;
     }
 
@@ -35,7 +37,7 @@ public class Emprestimo {
         this.leitor_rg = leitor_rg;
     }
 
-    public void setData_devolucao(String data_devolucao) {
+    public void setData_devolucao(Date data_devolucao) {
         this.data_devolucao = data_devolucao;
     }
     
