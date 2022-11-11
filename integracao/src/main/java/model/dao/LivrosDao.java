@@ -14,8 +14,19 @@ import javax.swing.JOptionPane;
 import model.beans.Livros;
 
 public class LivrosDao {
+    
+    private Connection con = null;
+
+    public LivrosDao(String teste) {
+        con = ConnectionFactory.getConnection(teste);
+    }
+
+    public LivrosDao() {
+        con = ConnectionFactory.getConnection();
+    }        
+    
 	public void create(Livros l) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
 
         try {
@@ -23,7 +34,7 @@ public class LivrosDao {
             stmt.setString(1, l.getTitulo());
             stmt.setString(2, l.getAutor());
             stmt.setInt(3, l.getUnidades());
-            stmt.setInt(4, l.getData_publicacao());
+            stmt.setDate(4, l.getData_publicacao());
             
             GenericDao.create(stmt, con);
 
@@ -37,7 +48,7 @@ public class LivrosDao {
     }
 
     public List<Livros> read() {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Livros> book = new ArrayList<>();
@@ -51,7 +62,7 @@ public class LivrosDao {
                 	rs.getString("Livro_titulo"),
                 	rs.getString("Livro_autor"),
                 	rs.getInt("Livro_unidade"),
-                	Integer.parseInt(rs.getDate("Livro_dataPublicacao").toString())
+                	rs.getDate("Livro_dataPublicacao")
                 );
                 book.add(l);
             }
@@ -66,7 +77,7 @@ public class LivrosDao {
     }
     
     public List<Livros> readFor(String titulo) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Livros> book = new ArrayList<>();
@@ -82,7 +93,7 @@ public class LivrosDao {
                     	rs.getString("Livro_titulo"),
                     	rs.getString("Livro_autor"),
                     	rs.getInt("Livro_unidade"),
-                    	Integer.parseInt(rs.getDate("Livro_dataPublicacao").toString())
+                    	("Livro_dataPublicacao")
                     );
             	book.add(l);
             }
@@ -97,7 +108,7 @@ public class LivrosDao {
     }
     
     public List<Livros> readFor(int rg) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Livros> book = new ArrayList<>();
@@ -113,7 +124,7 @@ public class LivrosDao {
                 	rs.getString("Livro_titulo"),
                 	rs.getString("Livro_autor"),
                 	rs.getInt("Livro_unidade"),
-                	Integer.parseInt(rs.getDate("Livro_dataPublicacao").toString())
+                	rs.getDate("Livro_dataPublicacao")
                 );
                 book.add(l);
             }
@@ -128,7 +139,7 @@ public class LivrosDao {
     }
     /*
     public void update(Livros l,int rg) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
@@ -153,7 +164,7 @@ public class LivrosDao {
     }
     
     public void delete(Livros l) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         

@@ -22,13 +22,13 @@ import model.beans.Emprestimo;
  */
 public class EmprestimoDao {
     public void create(Emprestimo l) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
 
         try {
             stmt = con.prepareStatement("INSERT INTO emprestimo(leitor_rg,livro_id,data_devolucao) VALUES(?,?,?) ");
             stmt.setInt(1, l.getLeitor_rg());
-            stmt.setString(2, l.getLivro_id());
+            stmt.setInt(2, l.getLivro_id());
             stmt.setDate(3, l.getData_devolucao());
             GenericDao.create(stmt, con);
 
@@ -40,9 +40,18 @@ public class EmprestimoDao {
         }
 
     }
+    private Connection con = null;
 
+    public EmprestimoDao(String teste) {
+        con = ConnectionFactory.getConnection(teste);
+    }
+
+    public EmprestimoDao() {
+        con = ConnectionFactory.getConnection();
+    }
+      
     public List<Emprestimo> read() {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
@@ -53,7 +62,7 @@ public class EmprestimoDao {
             while (rs.next()) {
                 Emprestimo l = new Emprestimo();
                 l.setLeitor_rg(rs.getInt("leitor_rg"));
-                l.setLivro_id(rs.getString("livro_id"));
+                l.setLivro_id(rs.getInt("livro_id"));
                 l.setData_devolucao(rs.getDate("data_devolucao"));
                 emprestado.add(l);
             }
@@ -68,7 +77,7 @@ public class EmprestimoDao {
     }
     
     public List<Emprestimo> readFor(int rg) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
@@ -81,7 +90,7 @@ public class EmprestimoDao {
             while (rs.next()) {
                 Emprestimo l = new Emprestimo();
                 l.setLeitor_rg(rs.getInt("leitor_rg"));
-                l.setLivro_id(rs.getString("livro_id"));
+                l.setLivro_id(rs.getInt("livro_id"));
                 l.setData_devolucao(rs.getDate("data_devolucao"));
                 emprestado.add(l);
             }
@@ -97,7 +106,7 @@ public class EmprestimoDao {
     //<editor-fold>
     /*
     public List<Emprestimo> readFor(int id) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
@@ -125,7 +134,7 @@ public class EmprestimoDao {
     }*/
     //</editor-fold>
     public void update(Emprestimo l,int rg,int id) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
@@ -134,7 +143,7 @@ public class EmprestimoDao {
                 "UPDATE emprestimo SET emprestimo_rg = ?,emprestimo_nome = ?,emprestimo_email = ? WHERE leitor_rg = ? and livro_id = ?"
             );
             stmt.setInt(1, l.getLeitor_rg());
-            stmt.setString(2, l.getLivro_id());
+            stmt.setInt(2, l.getLivro_id());
             stmt.setDate(3, l.getData_devolucao());
             stmt.setInt(4, rg);
             stmt.setInt(5, id);
@@ -151,15 +160,16 @@ public class EmprestimoDao {
     }
     
     public void delete(Emprestimo l) {
-        Connection con = ConnectionFactory.getConnection();
+        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
         try {
             stmt = con.prepareStatement(
-                "DELETE FROM emprestimo WHERE leitor_rg = ?"
+                "DELETE FROM emprestimo WHERE leitor_rg = ? and livro_id ?"
             );
             stmt.setInt(1, l.getLeitor_rg());
+            stmt.setInt(2, l.getLivro_id());
             GenericDao.update(stmt, con);
             JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
         } catch (SQLException ex) {

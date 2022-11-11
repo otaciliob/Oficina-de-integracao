@@ -4,20 +4,20 @@ import java.sql.Date;
 
 public class Emprestimo {
     
-    private String livro_id;
+    private int livro_id;
     private int leitor_rg;
     private Date data_devolucao;
 
     public Emprestimo() {
     }
 
-    public Emprestimo(String livro_id, int leitor_rg, Date data_devolucao) {
+    public Emprestimo(int livro_id, int leitor_rg, Date data_devolucao) {
         this.livro_id = livro_id;
         this.leitor_rg = leitor_rg;
         this.data_devolucao = data_devolucao;
     }
 
-    public String getLivro_id() {
+    public int getLivro_id() {
         return livro_id;
     }
 
@@ -29,7 +29,7 @@ public class Emprestimo {
         return data_devolucao;
     }
 
-    public void setLivro_id(String livro_id) {
+    public void setLivro_id(int livro_id) {
         this.livro_id = livro_id;
     }
 
