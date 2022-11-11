@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TelaLoginTest {
+public class TelaLogin {
 
     static Connection conexao;
     private final static String user = "login";
