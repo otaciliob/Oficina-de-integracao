@@ -5,17 +5,29 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+import model.beans.ComboItem;
+import model.beans.Leitor;
+import model.beans.Livros;
+import model.dao.LeitorDao;
+import model.dao.LivrosDao;
+
 /**
  *
  * @author Computador
  */
 public class TelaEmprestimo extends javax.swing.JFrame {
-
+    
+     LeitorDao dao = new LeitorDao();
+     LivrosDao dao2 = new LivrosDao();
+     
     /**
      * Creates new form EmprestimoView
      */
     public TelaEmprestimo() {
         initComponents();
+
+        comboBoxPopulate();
     }
 
     /**
@@ -29,51 +41,170 @@ public class TelaEmprestimo extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cmbLeitor = new javax.swing.JComboBox();
+        cmbLivro = new javax.swing.JComboBox();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        txtLivAutor = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Empréstimo");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Leitor:");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Livro:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {null}));
+        cmbLeitor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cmbLeitor.setMaximumRowCount(900000000);
+        cmbLeitor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {null}));
+        cmbLeitor.setToolTipText("");
+        cmbLeitor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbLeitorActionPerformed(evt);
+            }
+        });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {null}));
+        cmbLivro.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cmbLivro.setMaximumRowCount(900000000);
+        cmbLivro.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] {null}));
+        cmbLivro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbLivroActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("Empréstimos de Livros");
+
+        jLabel4.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel4.setText("*");
+
+        jLabel10.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel10.setText("Campos obrigatórios possuem um (*)");
+
+        jLabel5.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel5.setText("*");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Data de Devolução:");
+
+        txtLivAutor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        jLabel6.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel6.setText("*");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(44, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cmbLeitor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbLivro, 0, 465, Short.MAX_VALUE)
+                                    .addComponent(txtLivAutor))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel6)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel10))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(182, 182, 182)
+                        .addComponent(jLabel9)))
+                .addContainerGap(144, Short.MAX_VALUE))
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtLivAutor});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cmbLeitor, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jLabel4)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(jLabel5)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(234, Short.MAX_VALUE))
+                    .addComponent(jLabel3)
+                    .addComponent(txtLivAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                .addComponent(jLabel10)
+                .addGap(17, 17, 17))
         );
 
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtLivAutor});
+
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void cmbLeitorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLeitorActionPerformed
+        try {
+            Object item = cmbLeitor.getSelectedItem();
+            String value = ((ComboItem)item).getValue();
+            System.out.println(item);
+            System.out.println(value);
+        } catch (NullPointerException erro) {
+            JOptionPane.showMessageDialog(null, "Selecione um item!");
+        }
+    }//GEN-LAST:event_cmbLeitorActionPerformed
+
+    private void cmbLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLivroActionPerformed
+                try {
+            Object item = cmbLivro.getSelectedItem();
+            String value = ((ComboItem)item).getValue();
+            System.out.println(item);
+            System.out.println(value);
+        } catch (NullPointerException erro) {
+            JOptionPane.showMessageDialog(null, "Selecione um item!");
+        }
+    }//GEN-LAST:event_cmbLivroActionPerformed
+    
+    public void comboBoxPopulate() {
+        //List<Leitor> leitor = dao.read();
+        for (Leitor lei : dao.read()) {
+            cmbLeitor.addItem(new ComboItem("Nome: "+lei.getNome()+" || RG: "+Integer.toString(lei.getRg())+" || E-mail: "+lei.getEmail(), Integer.toString(lei.getRg())));
+        }
+        for (Livros liv : dao2.select()) {
+            cmbLivro.addItem(new ComboItem("Título: "+liv.getNome()+" || Autor: "+liv.getAutor()+" || Ano: "+liv.getAno()+" || ID: "+Integer.toString(liv.getId()), Integer.toString(liv.getId())));
+        }
+            
+    }
     /**
      * @param args the command line arguments
      */
@@ -113,9 +244,16 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox cmbLeitor;
+    private javax.swing.JComboBox cmbLivro;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JTextField txtLivAutor;
     // End of variables declaration//GEN-END:variables
 }
