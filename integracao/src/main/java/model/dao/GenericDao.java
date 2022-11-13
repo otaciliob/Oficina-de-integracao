@@ -34,8 +34,6 @@ public class GenericDao {
             rs = stmt.executeQuery();
         } catch (SQLException ex) {
             Logger.getLogger(GenericDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return rs;
     }
@@ -46,10 +44,7 @@ public class GenericDao {
             stmt.executeUpdate();
         } catch (SQLException ex) {
             Logger.getLogger(GenericDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
-
     }
 
     public static void delete(PreparedStatement stmt, Connection con) {
@@ -59,9 +54,6 @@ public class GenericDao {
 
         } catch (SQLException ex) {
             Logger.getLogger(GenericDao.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
-
     }
 }

@@ -14,8 +14,16 @@ import javax.swing.JOptionPane;
 import model.beans.Livros;
 
 public class LivrosDao {
+
+    Connection con = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
     
-    private Connection con = null;
+    private static final String sqlinsert = "INSERT INTO livro(livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(?,?,?,?)";
+    private static final String sqlselect = "SELECT * FROM livro";
+    private static final String sqlselectfrom = "SELECT * FROM livro WHERE livro_nome LIKE ?";
+    private static final String sqlupdate = "UPDATE livro SET livro_nome = ?, livro_autor = ?, livro_ano = ?, livro_unidades = ? WHERE livro_id = ?";
+    private static final String sqldelete = "DELETE FROM livro WHERE livro_id = ?";
 
     public LivrosDao(String teste) {
         con = ConnectionFactory.getConnection(teste);
@@ -23,164 +31,103 @@ public class LivrosDao {
 
     public LivrosDao() {
         con = ConnectionFactory.getConnection();
-    }        
-    
-	public void create(Livros l) {
-        
-        PreparedStatement stmt = null;
+    }
 
+    public boolean insert(Livros liv) {
         try {
-            stmt = con.prepareStatement("INSERT INTO Livro(livro_id,livro_titulo,Livros_autor,livro_unidade,livro_datapublicacao) VALUES(?,?,?) ");
-            stmt.setString(1, l.getTitulo());
-            stmt.setString(2, l.getAutor());
-            stmt.setInt(3, l.getUnidades());
-            stmt.setDate(4, l.getData_publicacao());
-            
+            stmt = con.prepareStatement(sqlinsert);
+            stmt.setString(1, liv.getNome());
+            stmt.setString(2, liv.getAutor());
+            stmt.setInt(3, liv.getAno());
+            stmt.setInt(4, liv.getUnidades());
             GenericDao.create(stmt, con);
-
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
+            return false;
         }
-
     }
 
-    public List<Livros> read() {
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    public List<Livros> select() {
         List<Livros> book = new ArrayList<>();
-        
+
         try {
-            stmt = con.prepareStatement("SELECT * FROM Livros");
+            stmt = con.prepareStatement(sqlselect);
             rs = GenericDao.read(stmt, con);
             while (rs.next()) {
                 Livros l = new Livros(
-                	rs.getInt("Livro_id"),
-                	rs.getString("Livro_titulo"),
-                	rs.getString("Livro_autor"),
-                	rs.getInt("Livro_unidade"),
-                	rs.getDate("Livro_dataPublicacao")
+                        rs.getInt("livro_id"),
+                        rs.getString("livro_nome"),
+                        rs.getString("livro_autor"),
+                        rs.getInt("livro_ano"),
+                        rs.getInt("livro_unidades")
+                );
+                book.add(l);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return book;
+    }
+
+    public List<Livros> selectFrom(String titulo) {
+        List<Livros> book = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement(sqlselectfrom);
+            stmt.setString(1, "%" + titulo + "%");
+
+            rs = GenericDao.read(stmt, con);
+            while (rs.next()) {
+                Livros l = new Livros(
+                        rs.getInt("livro_id"),
+                        rs.getString("livro_nome"),
+                        rs.getString("livro_autor"),
+                        rs.getInt("livro_ano"),
+                        rs.getInt("livro_unidades")
                 );
                 book.add(l);
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return book;
     }
-    
-    public List<Livros> readFor(String titulo) {
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Livros> book = new ArrayList<>();
-        
-        try {
-            stmt = con.prepareStatement("SELECT * FROM Livros WHERE Livros_titulo LIKE '%?%'");
-            stmt.setString(1, titulo);
-            
-            rs = GenericDao.read(stmt, con);
-            while (rs.next()) {
-            	Livros l = new Livros(
-                    	rs.getInt("Livro_id"),
-                    	rs.getString("Livro_titulo"),
-                    	rs.getString("Livro_autor"),
-                    	rs.getInt("Livro_unidade"),
-                    	("Livro_dataPublicacao")
-                    );
-            	book.add(l);
+
+    public boolean update(Livros liv, int id) {
+        if (liv != null) {
+            try {
+                stmt = con.prepareStatement(sqlupdate);
+                stmt.setString(1, liv.getNome());
+                stmt.setString(2, liv.getAutor());
+                stmt.setInt(3, liv.getAno());
+                stmt.setInt(4, liv.getUnidades());
+                stmt.setInt(5, id);
+
+                GenericDao.update(stmt, con);
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
-        return book;
+        return false;
     }
-    
-    public List<Livros> readFor(int rg) {
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Livros> book = new ArrayList<>();
-        
-        try {
-            stmt = con.prepareStatement("SELECT * FROM Livros WHERE Livros_rg = ?");
-            stmt.setInt(1, rg);
-            
-            rs = GenericDao.read(stmt, con);
-            while (rs.next()) {
-                Livros l = new Livros(
-                	rs.getInt("Livro_id"),
-                	rs.getString("Livro_titulo"),
-                	rs.getString("Livro_autor"),
-                	rs.getInt("Livro_unidade"),
-                	rs.getDate("Livro_dataPublicacao")
-                );
-                book.add(l);
+
+    public boolean delete(Livros liv) {
+        if (liv != null) {
+            try {
+                stmt = con.prepareStatement(sqldelete);
+                stmt.setInt(1, liv.getId());
+                GenericDao.update(stmt, con);
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
             }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
-        return book;
+        return false;
     }
-    /*
-    public void update(Livros l,int rg) {
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            stmt = con.prepareStatement(
-                "UPDATE Livros SET Livros_rg = ?,Livros_ = ?,Livros_email = ? WHERE Livros_rg = ?"
-            );
-            stmt.setInt(1, l.getRg());
-            stmt.setString(2, l.get());
-            stmt.setString(3, l.getEmail());
-            stmt.setInt(4, rg);
-            
-            GenericDao.update(stmt, con);
-            JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
-        } catch (SQLException ex) {
-            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-
-    }
-    
-    public void delete(Livros l) {
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        
-        try {
-            stmt = con.prepareStatement(
-                "DELETE FROM Livros WHERE Livros_id = ?"
-            );
-            stmt.setInt(1, l.getRg());
-            GenericDao.update(stmt, con);
-            JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
-        } catch (SQLException ex) {
-            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao excluir " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-
-    }*/
 }

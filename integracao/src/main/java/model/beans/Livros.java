@@ -1,61 +1,61 @@
 package model.beans;
 
-import java.sql.Date;
-
 public class Livros {
 
     private int id;
-    private String titulo;
+    private String nome;
     private String autor;
+    private int ano;
     private int unidades;
-    private Date data_publicacao;
 
     public Livros() {
     }
 
-    public Livros(int id, String titulo, String autor, int unidades, Date data_publicacao) {
+    public Livros(int id, String nome, String autor, int ano, int unidades) {
         this.id = id;
-        this.titulo = titulo;
+        this.nome = nome;
         this.autor = autor;
+        this.ano = ano;
         this.unidades = unidades;
-        this.data_publicacao = data_publicacao;
     }
 
+    public int getId() {
+        return id;
+    }
 
-
-    public String getTitulo() {
-        return titulo;
+    public String getNome() {
+        return nome;
     }
 
     public String getAutor() {
         return autor;
+    }
+    
+    public int getAno() {
+        return ano;
     }
 
     public int getUnidades() {
         return unidades;
     }
 
-    public Date getData_publicacao() {
-        return data_publicacao;
+    public void setId(int id) {
+        this.id = id;
     }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
+        
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public void setAutor(String autor) {
         this.autor = autor;
     }
+    
+    public void setAno(int ano) {
+        this.ano = ano;
+    }   
 
     public void setUnidades(int unidades) {
         this.unidades = unidades;
     }
-
-    public void setData_publicacao(Date data_publicacao) {
-        this.data_publicacao = data_publicacao;
-    }
-    
-    
-
-    
 }
