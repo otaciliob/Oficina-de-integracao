@@ -5,10 +5,15 @@
  */
 package view;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.JOptionPane;
 import model.beans.ComboItem;
+import model.beans.Emprestimo;
 import model.beans.Leitor;
 import model.beans.Livros;
+import model.dao.EmprestimoDao;
 import model.dao.LeitorDao;
 import model.dao.LivrosDao;
 
@@ -17,10 +22,11 @@ import model.dao.LivrosDao;
  * @author Computador
  */
 public class TelaEmprestimo extends javax.swing.JFrame {
-    
-     LeitorDao dao = new LeitorDao();
-     LivrosDao dao2 = new LivrosDao();
-     
+
+    LeitorDao dao = new LeitorDao();
+    LivrosDao dao2 = new LivrosDao();
+    EmprestimoDao dao3 = new EmprestimoDao();
+
     /**
      * Creates new form EmprestimoView
      */
@@ -28,6 +34,13 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         initComponents();
 
         comboBoxPopulate();
+    }
+
+    public String formatSqlDate(java.sql.Date data) throws Exception {
+        if (data == null) {
+            return null;
+        }
+        return new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date(data.getTime()));
     }
 
     /**
@@ -48,8 +61,11 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtLivAutor = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
+        txtEmpData = new javax.swing.JTextField();
+        btnAdicionar = new javax.swing.JButton();
+        btnAlterar = new javax.swing.JButton();
+        btnRemover = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Empréstimo");
@@ -95,10 +111,31 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel3.setText("Data de Devolução:");
 
-        txtLivAutor.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
         jLabel6.setForeground(new java.awt.Color(255, 0, 51));
         jLabel6.setText("*");
+
+        txtEmpData.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+
+        btnAdicionar.setText("Cadastrar");
+        btnAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdicionarActionPerformed(evt);
+            }
+        });
+
+        btnAlterar.setText("Alterar");
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
+
+        btnRemover.setText("Excluir");
+        btnRemover.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,15 +152,22 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel3))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cmbLeitor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cmbLivro, 0, 465, Short.MAX_VALUE)
-                                    .addComponent(txtLivAutor))
+                                    .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(83, 83, 83)
+                                        .addComponent(btnAdicionar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnAlterar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnRemover)))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addComponent(jLabel10))))
@@ -133,14 +177,13 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 .addContainerGap(144, Short.MAX_VALUE))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtLivAutor});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtEmpData});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(12, 12, 12)
                 .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(cmbLeitor, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -158,58 +201,116 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                         .addGap(11, 11, 11)
                         .addComponent(jLabel5)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(txtLivAutor, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 196, Short.MAX_VALUE)
+                    .addComponent(btnAdicionar)
+                    .addComponent(btnAlterar)
+                    .addComponent(btnRemover))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addGap(17, 17, 17))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtLivAutor});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtEmpData});
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void cmbLeitorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLeitorActionPerformed
-        try {
-            Object item = cmbLeitor.getSelectedItem();
-            String value = ((ComboItem)item).getValue();
-            System.out.println(item);
-            System.out.println(value);
-        } catch (NullPointerException erro) {
-            JOptionPane.showMessageDialog(null, "Selecione um item!");
-        }
+        comboLeitor();
     }//GEN-LAST:event_cmbLeitorActionPerformed
 
     private void cmbLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbLivroActionPerformed
-                try {
-            Object item = cmbLivro.getSelectedItem();
-            String value = ((ComboItem)item).getValue();
-            System.out.println(item);
-            System.out.println(value);
-        } catch (NullPointerException erro) {
-            JOptionPane.showMessageDialog(null, "Selecione um item!");
-        }
+        comboLivro();
     }//GEN-LAST:event_cmbLivroActionPerformed
-    
+
+    private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
+        Emprestimo emp = carregaEmprestimo(); 
+        SimpleDateFormat dateFor = new SimpleDateFormat("dd/MM/yyyy");
+        if (comboLivro() == null || comboLeitor() == null) {
+            JOptionPane.showMessageDialog(null, "Preencha o campo obrigatório");
+        } else {
+            try {
+                if (dao3.create(emp)) {
+                    JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Erro");
+                }
+            } catch(NullPointerException erro) {
+                System.out.println(erro);
+            }
+        }
+    }//GEN-LAST:event_btnAdicionarActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+
+    }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
+
+    }//GEN-LAST:event_btnRemoverActionPerformed
+
     public void comboBoxPopulate() {
-        //List<Leitor> leitor = dao.read();
         for (Leitor lei : dao.read()) {
-            cmbLeitor.addItem(new ComboItem("Nome: "+lei.getNome()+" || RG: "+Integer.toString(lei.getRg())+" || E-mail: "+lei.getEmail(), Integer.toString(lei.getRg())));
+            cmbLeitor.addItem(new ComboItem("Nome: " + lei.getNome() + " || RG: " + Integer.toString(lei.getRg()) + " || E-mail: " + lei.getEmail(), Integer.toString(lei.getRg())));
         }
         for (Livros liv : dao2.select()) {
-            cmbLivro.addItem(new ComboItem("Título: "+liv.getNome()+" || Autor: "+liv.getAutor()+" || Ano: "+liv.getAno()+" || ID: "+Integer.toString(liv.getId()), Integer.toString(liv.getId())));
+            cmbLivro.addItem(new ComboItem("Título: " + liv.getNome() + " || Autor: " + liv.getAutor() + " || Ano: " + liv.getAno() + " || ID: " + Integer.toString(liv.getId()), Integer.toString(liv.getId())));
         }
-            
+    }
+
+    public Emprestimo carregaEmprestimo() {
+        Emprestimo emp = null;
+        SimpleDateFormat dateFor = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            int id = Integer.valueOf(comboLivro());
+            int rg = Integer.valueOf(comboLeitor());
+            Date date = dateFor.parse(txtEmpData.getText());
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+            emp = new Emprestimo(id, rg, sqlDate);
+        } catch (ParseException | NumberFormatException erro) {
+            System.out.println(erro);
+            JOptionPane.showMessageDialog(null, "Erro");
+        }
+
+        return emp;
+    }
+    
+    public String comboLivro(){
+        try {
+            Object item = cmbLivro.getSelectedItem();
+            String value = ((ComboItem) item).getValue();
+            return value;
+        } catch (NullPointerException erro) {
+            System.out.println(erro);
+        }
+        return null;
+    }
+    
+    public String comboLeitor() {
+        try {
+            Object item = cmbLeitor.getSelectedItem();
+            String value = ((ComboItem) item).getValue();
+            return value;
+        } catch (NullPointerException erro) {
+            System.out.println(erro);
+        }
+        return null;
     }
     /**
      * @param args the command line arguments
      */
-    
-    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -221,16 +322,24 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEmprestimo.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEmprestimo.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEmprestimo.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaEmprestimo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaEmprestimo.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -244,6 +353,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdicionar;
+    private javax.swing.JButton btnAlterar;
+    private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox cmbLeitor;
     private javax.swing.JComboBox cmbLivro;
     private javax.swing.JLabel jLabel1;
@@ -254,6 +366,6 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField txtLivAutor;
+    private javax.swing.JTextField txtEmpData;
     // End of variables declaration//GEN-END:variables
 }

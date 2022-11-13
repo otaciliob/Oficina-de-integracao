@@ -21,24 +21,20 @@ import model.beans.Emprestimo;
  * @author Computador
  */
 public class EmprestimoDao {
-    public void create(Emprestimo l) {
-        
+    public boolean create(Emprestimo l) {
         PreparedStatement stmt = null;
-
+        
         try {
             stmt = con.prepareStatement("INSERT INTO emprestimo(leitor_rg,livro_id,data_devolucao) VALUES(?,?,?) ");
             stmt.setInt(1, l.getLeitor_rg());
             stmt.setInt(2, l.getLivro_id());
             stmt.setDate(3, l.getData_devolucao());
             GenericDao.create(stmt, con);
-
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
+            return false;
         }
-
     }
     private Connection con = null;
 
@@ -51,7 +47,6 @@ public class EmprestimoDao {
     }
       
     public List<Emprestimo> read() {
-        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
@@ -70,14 +65,11 @@ public class EmprestimoDao {
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return emprestado;
     }
     
     public List<Emprestimo> readFor(int rg) {
-        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
@@ -98,8 +90,6 @@ public class EmprestimoDao {
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return emprestado;
     }
@@ -134,7 +124,6 @@ public class EmprestimoDao {
     }*/
     //</editor-fold>
     public void update(Emprestimo l,int rg,int id) {
-        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
@@ -153,14 +142,10 @@ public class EmprestimoDao {
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
-
     }
     
     public void delete(Emprestimo l) {
-        
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
@@ -175,9 +160,6 @@ public class EmprestimoDao {
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao excluir " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
-
     }
 }
