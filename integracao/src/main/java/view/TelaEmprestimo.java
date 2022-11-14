@@ -9,6 +9,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import model.beans.ComboItem;
 import model.beans.Emprestimo;
 import model.beans.Leitor;
@@ -33,6 +35,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     public TelaEmprestimo() {
         initComponents();
 
+        DefaultTableModel modelo = (DefaultTableModel) tblEmprestimos.getModel();
+        tblEmprestimos.setRowSorter(new TableRowSorter(modelo));
+        zerar();
         comboBoxPopulate();
     }
 
@@ -66,8 +71,13 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         btnAdicionar = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
         btnRemover = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblEmprestimos = new javax.swing.JTable();
+        txtEmpPesquisar = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Empréstimo");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -137,87 +147,147 @@ public class TelaEmprestimo extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel7.setText("formato: dd/MM/yyyy");
+
+        tblEmprestimos = new javax.swing.JTable() {
+            public boolean isCellEditable(int rowIndex, int colIndex){
+                return false;
+            }
+        };
+        tblEmprestimos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Id do Livro", "RG do Leitor", "Data de Devolução"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblEmprestimos.setFocusable(false);
+        tblEmprestimos.getTableHeader().setReorderingAllowed(false);
+        tblEmprestimos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblEmprestimosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblEmprestimos);
+
+        txtEmpPesquisar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEmpPesquisarKeyReleased(evt);
+            }
+        });
+
+        jLabel11.setText("Pesquisar por RG:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnAdicionar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnAlterar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRemover)
+                .addGap(45, 45, 45))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cmbLeitor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cmbLivro, 0, 465, Short.MAX_VALUE)
-                                    .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(83, 83, 83)
-                                        .addComponent(btnAdicionar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnAlterar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btnRemover)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jLabel10))))
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtEmpPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(182, 182, 182)
-                        .addComponent(jLabel9)))
-                .addContainerGap(144, Short.MAX_VALUE))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel6)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(107, 107, 107)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbLivro, 0, 465, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cmbLeitor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel4))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addGap(123, 123, 123))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtEmpData});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cmbLeitor, cmbLivro});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
                 .addComponent(jLabel9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cmbLeitor, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel4)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(cmbLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel5)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel6))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 217, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cmbLeitor, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel3))
+                    .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7))
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEmpPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
                     .addComponent(btnAdicionar)
                     .addComponent(btnAlterar)
                     .addComponent(btnRemover))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10)
-                .addGap(17, 17, 17))
+                .addGap(13, 13, 13))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cmbLeitor, cmbLivro, txtEmpData});
@@ -235,30 +305,116 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     }//GEN-LAST:event_cmbLivroActionPerformed
 
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
-        Emprestimo emp = carregaEmprestimo(); 
-        SimpleDateFormat dateFor = new SimpleDateFormat("dd/MM/yyyy");
+        Emprestimo emp = carregaEmprestimo();
+
         if (comboLivro() == null || comboLeitor() == null) {
             JOptionPane.showMessageDialog(null, "Preencha o campo obrigatório");
         } else {
             try {
                 if (dao3.create(emp)) {
                     JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                    zerar();
                 } else {
                     JOptionPane.showMessageDialog(null, "Erro");
                 }
-            } catch(NullPointerException erro) {
+            } catch (NullPointerException erro) {
                 System.out.println(erro);
             }
         }
     }//GEN-LAST:event_btnAdicionarActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
-
+        Emprestimo emp = carregaEmprestimo();
+        if ((comboLivro() == null || comboLeitor() == null)) {
+            JOptionPane.showMessageDialog(null, "Preencha o campo obrigatório");
+        } else {
+            if (dao3.update(emp, Integer.valueOf(comboLeitor()), Integer.valueOf(comboLivro()))) {
+                JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                zerar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro");
+            }
+        }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnRemoverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverActionPerformed
-
+        int confirma = JOptionPane.showConfirmDialog(null, "Quer mesmo excluir  o livro?", "Aviso", JOptionPane.YES_NO_OPTION);
+        Emprestimo emp = carregaEmprestimo();
+        if (confirma == JOptionPane.YES_OPTION) {
+            if (dao3.delete(emp)) {
+                JOptionPane.showMessageDialog(null, "Livro excluído com sucesso");
+                zerar();
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro");
+            }
+        }
     }//GEN-LAST:event_btnRemoverActionPerformed
+
+    private void tblEmprestimosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmprestimosMouseClicked
+        // Evento para setar os campos da tabela no formulário
+        setar_campos();
+    }//GEN-LAST:event_tblEmprestimosMouseClicked
+
+    private void txtEmpPesquisarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmpPesquisarKeyReleased
+        // Evento enquanto está digitando
+        pesquisar();
+    }//GEN-LAST:event_txtEmpPesquisarKeyReleased
+
+    public void zerar() {
+        DefaultTableModel modelo = (DefaultTableModel) tblEmprestimos.getModel();
+        modelo.setNumRows(0);
+        cmbLeitor.setSelectedIndex(0);
+        cmbLivro.setSelectedIndex(0);
+        txtEmpData.setText(null);
+        for (Emprestimo emp : dao3.read()) {
+            modelo.addRow(new Object[]{
+                emp.getLivro_id(),
+                emp.getLeitor_rg(),
+                emp.getData_devolucao()
+            });
+        }
+    }
+
+    private void pesquisar() {
+        DefaultTableModel modelo = (DefaultTableModel) tblEmprestimos.getModel();
+        modelo.setNumRows(0);
+        int rg = 0;
+        try {
+            if (txtEmpPesquisar.getText().length() > 0) {
+                rg = Integer.valueOf(txtEmpPesquisar.getText());
+                if (rg < 0) {
+                    rg = 0;
+                }
+            } else {
+                zerar();
+            }
+            for (Emprestimo emp : dao3.readFor(rg)) {
+                modelo.addRow(new Object[]{
+                    emp.getLivro_id(),
+                    emp.getLeitor_rg(),
+                    emp.getData_devolucao()
+                });
+            }
+        } catch (NumberFormatException erro) {
+            System.out.println(erro);
+        }
+    }
+
+    private void setar_campos() {
+        int setar = tblEmprestimos.getSelectedRow();
+        // TODO Fazer o setar funcionar nos combobox
+        cmbLeitor.setSelectedItem(tblEmprestimos.getModel().getValueAt(setar, 0).toString());
+        cmbLivro.setSelectedItem(tblEmprestimos.getModel().getValueAt(setar, 1).toString());
+        try {
+            String ds1 = tblEmprestimos.getModel().getValueAt(setar, 2).toString();
+            SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+            String ds2 = sdf2.format(sdf1.parse(ds1));
+            txtEmpData.setText(ds2);
+        } catch (ParseException erro) {
+            System.out.println(erro);
+        }
+    }
 
     public void comboBoxPopulate() {
         for (Leitor lei : dao.read()) {
@@ -286,8 +442,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
 
         return emp;
     }
-    
-    public String comboLivro(){
+
+    public String comboLivro() {
+        // TODO: Previnir NullPointerException
         try {
             Object item = cmbLivro.getSelectedItem();
             String value = ((ComboItem) item).getValue();
@@ -297,8 +454,9 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         }
         return null;
     }
-    
+
     public String comboLeitor() {
+        // TODO: Previnir NullPointerException
         try {
             Object item = cmbLeitor.getSelectedItem();
             String value = ((ComboItem) item).getValue();
@@ -308,6 +466,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         }
         return null;
     }
+
     /**
      * @param args the command line arguments
      */
@@ -360,12 +519,17 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbLivro;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblEmprestimos;
     private javax.swing.JTextField txtEmpData;
+    private javax.swing.JTextField txtEmpPesquisar;
     // End of variables declaration//GEN-END:variables
 }

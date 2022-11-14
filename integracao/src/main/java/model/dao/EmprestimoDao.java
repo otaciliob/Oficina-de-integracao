@@ -21,9 +21,10 @@ import model.beans.Emprestimo;
  * @author Computador
  */
 public class EmprestimoDao {
+
     public boolean create(Emprestimo l) {
         PreparedStatement stmt = null;
-        
+
         try {
             stmt = con.prepareStatement("INSERT INTO emprestimo(leitor_rg,livro_id,data_devolucao) VALUES(?,?,?) ");
             stmt.setInt(1, l.getLeitor_rg());
@@ -45,12 +46,12 @@ public class EmprestimoDao {
     public EmprestimoDao() {
         con = ConnectionFactory.getConnection();
     }
-      
+
     public List<Emprestimo> read() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
-        
+
         try {
             stmt = con.prepareStatement("SELECT * FROM emprestimo");
             rs = GenericDao.read(stmt, con);
@@ -68,16 +69,16 @@ public class EmprestimoDao {
         }
         return emprestado;
     }
-    
+
     public List<Emprestimo> readFor(int rg) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Emprestimo> emprestado = new ArrayList<>();
-        
+
         try {
-            stmt = con.prepareStatement("SELECT * FROM emprestimo WHERE leitor_rg LIKE '%?%'");
+            stmt = con.prepareStatement("SELECT * FROM emprestimo WHERE leitor_rg LIKE ?");
             stmt.setInt(1, rg);
-            
+
             rs = GenericDao.read(stmt, con);
             while (rs.next()) {
                 Emprestimo l = new Emprestimo();
@@ -93,73 +94,42 @@ public class EmprestimoDao {
         }
         return emprestado;
     }
-    //<editor-fold>
-    /*
-    public List<Emprestimo> readFor(int id) {
-        
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Emprestimo> emprestado = new ArrayList<>();
-        
-        try {
-            stmt = con.prepareStatement("SELECT * FROM emprestimo WHERE emprestimo_rg = ?");
-            stmt.setInt(1, rg);
-            
-            rs = GenericDao.read(stmt, con);
-            while (rs.next()) {
-                Emprestimo l = new Emprestimo();
-                l.setRg(rs.getInt("emprestimo_rg"));
-                l.setNome(rs.getString("emprestimo_nome"));
-                l.setEmail(rs.getString("emprestimo_email"));
-                emprestado.add(l);
-            }
 
-        } catch (SQLException ex) {
-            Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
-        }
-        return emprestado;
-    }*/
-    //</editor-fold>
-    public void update(Emprestimo l,int rg,int id) {
+    public boolean update(Emprestimo l, int rg, int id) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             stmt = con.prepareStatement(
-                "UPDATE emprestimo SET emprestimo_rg = ?,emprestimo_nome = ?,emprestimo_email = ? WHERE leitor_rg = ? and livro_id = ?"
+                    "UPDATE emprestimo SET data_devolucao = ? WHERE leitor_rg = ? and livro_id = ?"
             );
-            stmt.setInt(1, l.getLeitor_rg());
-            stmt.setInt(2, l.getLivro_id());
-            stmt.setDate(3, l.getData_devolucao());
-            stmt.setInt(4, rg);
-            stmt.setInt(5, id);
-            
+            stmt.setDate(1, l.getData_devolucao());
+            stmt.setInt(2, rg);
+            stmt.setInt(3, id);
+
             GenericDao.update(stmt, con);
-            JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
+            return false;
         }
     }
-    
-    public void delete(Emprestimo l) {
+
+    public boolean delete(Emprestimo l) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         try {
             stmt = con.prepareStatement(
-                "DELETE FROM emprestimo WHERE leitor_rg = ? and livro_id ?"
+                    "DELETE FROM emprestimo WHERE livro_id = ? AND leitor_rg = ?"
             );
-            stmt.setInt(1, l.getLeitor_rg());
-            stmt.setInt(2, l.getLivro_id());
+            stmt.setInt(1, l.getLivro_id());
+            stmt.setInt(2, l.getLeitor_rg());
             GenericDao.update(stmt, con);
-            JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+            return true;
         } catch (SQLException ex) {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao excluir " + ex);
+            return false;
         }
     }
 }
