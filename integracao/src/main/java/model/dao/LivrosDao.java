@@ -18,12 +18,14 @@ public class LivrosDao {
     Connection con = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
-    
+
     private static final String sqlinsert = "INSERT INTO livro(livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(?,?,?,?)";
     private static final String sqlselect = "SELECT * FROM livro";
     private static final String sqlselectfrom = "SELECT * FROM livro WHERE livro_nome LIKE ?";
     private static final String sqlupdate = "UPDATE livro SET livro_nome = ?, livro_autor = ?, livro_ano = ?, livro_unidades = ? WHERE livro_id = ?";
     private static final String sqldelete = "DELETE FROM livro WHERE livro_id = ?";
+    private static final String sqlemprestado = "UPDATE livro SET livro_unidades = livro_unidades - 1 WHERE livro_id = ?";
+    private static final String sqldevolvido = "UPDATE livro SET livro_unidades = livro_unidades + 1 WHERE livro_id = ?";
 
     public LivrosDao(String teste) {
         con = ConnectionFactory.getConnection(teste);
@@ -31,6 +33,25 @@ public class LivrosDao {
 
     public LivrosDao() {
         con = ConnectionFactory.getConnection();
+    }
+
+    public boolean emprestimo(int id, int funcao) {
+
+        try {
+            if (funcao > 1) {
+                stmt = con.prepareStatement(sqlemprestado);
+                stmt.setInt(1, id);
+            } else {
+                stmt = con.prepareStatement(sqldevolvido);
+                stmt.setInt(1, id);
+            }
+            GenericDao.update(stmt, con);
+        } catch (SQLException ex) {
+            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+
+        return true;
     }
 
     public boolean insert(Livros liv) {
