@@ -332,15 +332,9 @@ public class TelaLivro extends javax.swing.JFrame {
             int unidadesli = 0;
             if (txtLivAno.getText().length() > 0) {
                 anoli = Integer.valueOf(txtLivAno.getText());
-                if (anoli < 0) {
-                    anoli = 0;
-                }
             }
             if (txtLivUnidades.getText().length() > 0) {
                 unidadesli = Integer.valueOf(txtLivUnidades.getText());
-                if (unidadesli < 0) {
-                    unidadesli = 0;
-                }
             }
             liv = new Livros(idli, tituloli, autorli, anoli, unidadesli);
         } catch (NumberFormatException erro) {

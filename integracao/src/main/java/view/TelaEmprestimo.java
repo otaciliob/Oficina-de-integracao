@@ -307,18 +307,23 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionarActionPerformed
         Emprestimo emp = carregaEmprestimo();
 
-        if (comboLivro() == null || comboLeitor() == null) {
-            JOptionPane.showMessageDialog(null, "Preencha o campo obrigatório");
+        if (dao2.consultaUnidades(Integer.valueOf(comboLivro())) <= 0) {
+            JOptionPane.showMessageDialog(null, "Erro");
         } else {
-            try {
-                if (dao3.create(emp)) {
-                    JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
-                    zerar();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Erro");
+            if (comboLivro() == null || comboLeitor() == null) {
+                JOptionPane.showMessageDialog(null, "Preencha o campo obrigatório");
+            } else {
+                try {
+                    if (dao3.create(emp)) {
+                        JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
+                        dao2.emprestimo(Integer.valueOf(comboLivro()),2);
+                        zerar();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Erro");
+                    }
+                } catch (NullPointerException erro) {
+                    System.out.println(erro);
                 }
-            } catch (NullPointerException erro) {
-                System.out.println(erro);
             }
         }
     }//GEN-LAST:event_btnAdicionarActionPerformed
@@ -343,6 +348,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         if (confirma == JOptionPane.YES_OPTION) {
             if (dao3.delete(emp)) {
                 JOptionPane.showMessageDialog(null, "Livro excluído com sucesso");
+                dao2.emprestimo(Integer.valueOf(comboLivro()),1);
                 zerar();
             } else {
                 JOptionPane.showMessageDialog(null, "Erro");

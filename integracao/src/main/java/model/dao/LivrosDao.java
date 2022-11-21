@@ -35,8 +35,26 @@ public class LivrosDao {
         con = ConnectionFactory.getConnection();
     }
 
-    public boolean emprestimo(int id, int funcao) {
+    public int consultaUnidades(int id) {
+        try {
+            stmt = con.prepareStatement("SELECT livro_unidades FROM livro WHERE livro_id = ?");
+            stmt.setInt(1, id);
 
+            rs = GenericDao.read(stmt, con);
+            int test = 0;
+            while (rs.next()) {
+                test = rs.getInt("livro_unidades");
+            }
+            if (test > 0) {
+                return test;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
+    public boolean emprestimo(int id, int funcao) {
         try {
             if (funcao > 1) {
                 stmt = con.prepareStatement(sqlemprestado);
@@ -55,18 +73,22 @@ public class LivrosDao {
     }
 
     public boolean insert(Livros liv) {
-        try {
-            stmt = con.prepareStatement(sqlinsert);
-            stmt.setString(1, liv.getNome());
-            stmt.setString(2, liv.getAutor());
-            stmt.setInt(3, liv.getAno());
-            stmt.setInt(4, liv.getUnidades());
-            GenericDao.create(stmt, con);
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
+        if (liv.getAno() < 0 || liv.getUnidades() < 0) {
             return false;
+        } else {
+            try {
+                stmt = con.prepareStatement(sqlinsert);
+                stmt.setString(1, liv.getNome());
+                stmt.setString(2, liv.getAutor());
+                stmt.setInt(3, liv.getAno());
+                stmt.setInt(4, liv.getUnidades());
+                GenericDao.create(stmt, con);
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
+                return false;
+            }
         }
     }
 
@@ -119,19 +141,23 @@ public class LivrosDao {
 
     public boolean update(Livros liv, int id) {
         if (liv != null) {
-            try {
-                stmt = con.prepareStatement(sqlupdate);
-                stmt.setString(1, liv.getNome());
-                stmt.setString(2, liv.getAutor());
-                stmt.setInt(3, liv.getAno());
-                stmt.setInt(4, liv.getUnidades());
-                stmt.setInt(5, id);
-
-                GenericDao.update(stmt, con);
-                return true;
-            } catch (SQLException ex) {
-                Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+            if (liv.getAno() < 0 || liv.getUnidades() < 0) {
                 return false;
+            } else {
+                try {
+                    stmt = con.prepareStatement(sqlupdate);
+                    stmt.setString(1, liv.getNome());
+                    stmt.setString(2, liv.getAutor());
+                    stmt.setInt(3, liv.getAno());
+                    stmt.setInt(4, liv.getUnidades());
+                    stmt.setInt(5, id);
+
+                    GenericDao.update(stmt, con);
+                    return true;
+                } catch (SQLException ex) {
+                    Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+                    return false;
+                }
             }
         }
         return false;
@@ -139,14 +165,18 @@ public class LivrosDao {
 
     public boolean delete(Livros liv) {
         if (liv != null) {
-            try {
-                stmt = con.prepareStatement(sqldelete);
-                stmt.setInt(1, liv.getId());
-                GenericDao.update(stmt, con);
-                return true;
-            } catch (SQLException ex) {
-                Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+            if (liv.getAno() < 0 || liv.getUnidades() < 0) {
                 return false;
+            } else {
+                try {
+                    stmt = con.prepareStatement(sqldelete);
+                    stmt.setInt(1, liv.getId());
+                    GenericDao.update(stmt, con);
+                    return true;
+                } catch (SQLException ex) {
+                    Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+                    return false;
+                }
             }
         }
         return false;

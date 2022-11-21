@@ -136,6 +136,34 @@ public class TelaLivroTest {
         book = dao.selectFrom("Nome");
         assertNotEquals(book.size(), 1);
     }
+    
+    @Test
+    public void testLivrosAnoInvalido() throws SQLException{
+        try {
+        String sqlinsert = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(3, 'Nome', 'Autor', -1, 0)";
+        PreparedStatement ps = conexao.prepareStatement(sqlinsert);
+        ps.executeUpdate(sqlinsert);
+        List<Livros> book = dao.select();
+
+        assertEquals(book.size(), 0);
+        }catch(java.sql.DataTruncation e) {
+            System.out.println(e);
+        }
+    }
+    
+    @Test
+    public void testLivrosUnidadesInvalidas() throws SQLException{
+        try {
+        String sqlinsert = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(3, 'Nome', 'Autor', 0, -1)";
+        PreparedStatement ps = conexao.prepareStatement(sqlinsert);
+        ps.executeUpdate(sqlinsert);
+        List<Livros> book = dao.select();
+
+        assertEquals(book.size(), 0);
+        }catch(java.sql.DataTruncation e) {
+            System.out.println(e);
+        }
+    }
 
     @After
     public void after() throws SQLException {

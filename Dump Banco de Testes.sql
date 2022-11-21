@@ -81,8 +81,8 @@ CREATE TABLE `livro` (
   `livro_id` int NOT NULL AUTO_INCREMENT,
   `livro_nome` varchar(120) NOT NULL,
   `livro_autor` varchar(120) DEFAULT NULL,
-  `livro_ano` int DEFAULT NULL,
-  `livro_unidades` int DEFAULT NULL,
+  `livro_ano` int UNSIGNED DEFAULT NULL,
+  `livro_unidades` int UNSIGNED DEFAULT NULL,
   PRIMARY KEY (`livro_id`),
   UNIQUE KEY `livro_id_UNIQUE` (`livro_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
