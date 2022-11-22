@@ -159,12 +159,12 @@ public class TelaEmprestimoTest {
     public void testEmprestimoDataInvalida() throws SQLException {
         try {
             String sqlinsertliv = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(3, 'Nome', 'Autor', 0, 0)";
-        String sqlinsertlei = "INSERT INTO leitor(leitor_rg, leitor_nome, leitor_email) VALUES(3, 'Júnior', 'e-mail03@e-mail03.com')";
-        String sqlinsertemp = "INSERT INTO emprestimo(livro_id, leitor_rg, data_devolucao) VALUES(3, 3, '10/04/2022')";
-        PreparedStatement ps = conexao.prepareStatement(sqlinsertliv);
-        ps.executeUpdate(sqlinsertliv);
-        ps.executeUpdate(sqlinsertlei);
-        ps.executeUpdate(sqlinsertemp);
+            String sqlinsertlei = "INSERT INTO leitor(leitor_rg, leitor_nome, leitor_email) VALUES(3, 'Júnior', 'e-mail03@e-mail03.com')";
+            String sqlinsertemp = "INSERT INTO emprestimo(livro_id, leitor_rg, data_devolucao) VALUES(3, 3, '10/04/2022')";
+            PreparedStatement ps = conexao.prepareStatement(sqlinsertliv);
+            ps.executeUpdate(sqlinsertliv);
+            ps.executeUpdate(sqlinsertlei);
+            ps.executeUpdate(sqlinsertemp);
         } catch (java.sql.DataTruncation e) {
             System.out.println(e);
         }
