@@ -22,6 +22,9 @@ import model.beans.Emprestimo;
  */
 public class EmprestimoDao {
 
+    /* private static final String restricao1 = "SELECT count(leitor_rg) FROM emprestimo WHERE leitor_rg = ?";
+    String para ser usa no stmt da ISSUE #7, count nao pode ser maior igual a 3
+    */
     public boolean create(Emprestimo l) {
         PreparedStatement stmt = null;
 
