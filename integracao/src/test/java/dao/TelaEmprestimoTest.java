@@ -165,17 +165,16 @@ public class TelaEmprestimoTest {
         ps.executeUpdate(sqlinsertliv);
         ps.executeUpdate(sqlinsertlei);
         ps.executeUpdate(sqlinsertemp);
-        List<Emprestimo> emp = dao.read();
-
-        assertNotEquals(emp.size(), 0);
-
-        String sqldeleteliv = "DELETE FROM livro WHERE livro_id = 3";
-        String sqldeletelei = "DELETE FROM leitor WHERE leitor_rg = 3";
-        ps.executeUpdate(sqldeleteliv);
-        ps.executeUpdate(sqldeletelei);
         } catch (java.sql.DataTruncation e) {
             System.out.println(e);
         }
+        List<Emprestimo> emp = dao.read();
+        assertEquals(emp.size(), 2);
+        String sqldeleteliv = "DELETE FROM livro WHERE livro_id = 3";
+        String sqldeletelei = "DELETE FROM leitor WHERE leitor_rg = 3";
+        PreparedStatement ps = conexao.prepareStatement(sqldeleteliv);
+        ps.executeUpdate(sqldeleteliv);
+        ps.executeUpdate(sqldeletelei);
     }
 
     @After
