@@ -93,8 +93,8 @@ public class UsuarioDao {
         if (usu != null) {
             try {
                 stmt = con.prepareStatement(sqlupdate);
-                stmt.setString(2, usu.getPassword());
-                stmt.setString(1, usu.getUser());
+                stmt.setString(1, usu.getPassword());
+                stmt.setString(2, usu.getUser());
 
                 GenericDao.update(stmt, con);
                 return true;
