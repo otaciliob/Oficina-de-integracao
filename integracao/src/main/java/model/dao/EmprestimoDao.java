@@ -24,19 +24,23 @@ public class EmprestimoDao {
 
     /* private static final String restricao1 = "SELECT count(leitor_rg) FROM emprestimo WHERE leitor_rg = ?";
     String para ser usa no stmt da ISSUE #7, count nao pode ser maior igual a 3
-    */
+     */
     public boolean create(Emprestimo l) {
         PreparedStatement stmt = null;
 
-        try {
-            stmt = con.prepareStatement("INSERT INTO emprestimo(leitor_rg,livro_id,data_devolucao) VALUES(?,?,?) ");
-            stmt.setInt(1, l.getLeitor_rg());
-            stmt.setInt(2, l.getLivro_id());
-            stmt.setDate(3, l.getData_devolucao());
-            GenericDao.create(stmt, con);
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
+        if (restricao1(l.getLeitor_rg())) {
+            try {
+                stmt = con.prepareStatement("INSERT INTO emprestimo(leitor_rg,livro_id,data_devolucao) VALUES(?,?,?) ");
+                stmt.setInt(1, l.getLeitor_rg());
+                stmt.setInt(2, l.getLivro_id());
+                stmt.setDate(3, l.getData_devolucao());
+                GenericDao.create(stmt, con);
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        } else {
             return false;
         }
     }
@@ -134,5 +138,26 @@ public class EmprestimoDao {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
             return false;
         }
+    }
+
+    public boolean restricao1(int leitor_rg) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        boolean pode = false;
+        try {
+            stmt = con.prepareStatement("SELECT count(leitor_rg) AS qtd FROM emprestimo WHERE leitor_rg = ?");
+            stmt.setInt(1, leitor_rg);
+            rs = GenericDao.read(stmt, con);
+            while (rs.next()) {
+                if (rs.getInt("qtd") < 3) {
+                    pode = true;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
+            pode = false;
+        }
+
+        return pode;
     }
 }
