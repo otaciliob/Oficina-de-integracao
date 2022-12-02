@@ -176,6 +176,36 @@ public class TelaEmprestimoTest {
         ps.executeUpdate(sqldeleteliv);
         ps.executeUpdate(sqldeletelei);
     }
+    
+    @Test
+    public void testRestricao() throws SQLException{
+        String sqlinsertlei = "INSERT INTO leitor(leitor_rg, leitor_nome, leitor_email) VALUES(30, 'Maria', 'e-mail30@e-mail.com')";
+        String sqlinsertliv = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(31, 'livro1', 'Autor1', 2000, 3)";
+        String sqlinsertliv02 = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(32, 'livro2', 'Autor1', 2000, 3)";
+        String sqlinsertliv03 = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(33, 'livro3', 'Autor1', 2000, 3)";
+        String sqlinsertliv04 = "INSERT INTO livro(livro_id, livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(34, 'livro4', 'Autor1', 2000, 3)";
+        String sqlinsertemp = "INSERT INTO emprestimo(livro_id, leitor_rg, data_devolucao) VALUES(31, 30, '2023-01-10')";
+        String sqlinsertemp02 = "INSERT INTO emprestimo(livro_id, leitor_rg, data_devolucao) VALUES(32, 30, '2023-01-10')";
+        String sqlinsertemp03 = "INSERT INTO emprestimo(livro_id, leitor_rg, data_devolucao) VALUES(33, 30, '2023-01-10')";
+        PreparedStatement ps = conexao.prepareStatement(sqlinsertlei);
+        ps.execute(sqlinsertlei);
+        ps.execute(sqlinsertliv);
+        ps.execute(sqlinsertliv02);
+        ps.execute(sqlinsertliv03);
+        ps.execute(sqlinsertliv04);
+        ps.execute(sqlinsertemp);
+        ps.execute(sqlinsertemp02);
+        ps.execute(sqlinsertemp03);
+        assertFalse(dao.restricao1(30));
+        assertFalse(dao.create(new Emprestimo(34,30,Date.valueOf("2023-01-10"))));
+        
+        String sqldeleteemp = "DELETE FROM emprestimo WHERE livro_id > 30 AND leitor_rg = 30";
+        String sqldeleteliv = "DELETE FROM livro WHERE livro_id > 30";
+        String sqldeletelei = "DELETE FROM leitor WHERE leitor_rg = 30";
+        ps.executeUpdate(sqldeleteemp);
+        ps.executeUpdate(sqldeleteliv);
+        ps.executeUpdate(sqldeletelei);
+    }
 
     @After
     public void after() throws SQLException {
