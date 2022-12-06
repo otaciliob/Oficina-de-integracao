@@ -1,9 +1,5 @@
 package dao;
 
-import model.dao.ConnectionFactory;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import org.junit.After;
@@ -20,18 +16,19 @@ import model.dao.UsuarioDao;
  */
 public class TelaUsuarioTest {
 
-    static Connection conexao;
     private static final String url = "jdbc:mysql://localhost:3306/teste";
     UsuarioDao dao = new UsuarioDao(url);
 
     @Before
     public void setup() throws SQLException {
-        conexao = ConnectionFactory.getConnection(url);
-        String sqlusuarioinsert = "INSERT INTO login(user, password) VALUES('A', '456')";
-        String sqlusuarioinsert02 = "INSERT INTO login(user, password) VALUES('B', '123')";
-        PreparedStatement ps = conexao.prepareStatement(sqlusuarioinsert);
-        ps.executeUpdate(sqlusuarioinsert);
-        ps.executeUpdate(sqlusuarioinsert02);
+        String usuario = "A";
+        String senha = "456";
+        Usuario usu = new Usuario(usuario, senha);
+        dao.insert(usu);
+        usuario = "B";
+        senha = "123";
+        usu = new Usuario(usuario, senha);
+        dao.insert(usu);
     }
 
     @Test
@@ -91,40 +88,49 @@ public class TelaUsuarioTest {
 
     @Test
     public void testUsuarioDeleteCorreto() throws SQLException {
-        String sqlinsert = "INSERT INTO login(user, password) VALUES('C', '789')";
-        PreparedStatement ps = conexao.prepareStatement(sqlinsert);
-        ps.executeUpdate(sqlinsert);
+        String usuario = "C";
+        String senha = "789";
+        Usuario usu = new Usuario(usuario, senha);
+        dao.insert(usu);
         List<Usuario> user = dao.select();
 
         assertEquals(user.get(2).getUser(), "C");
 
-        String sqldelete = "DELETE FROM login WHERE user = 'C'";
-        ps.executeUpdate(sqldelete);
+        String usuario2 = "C";
+        String senha2 = "789";
+        Usuario usu2 = new Usuario(usuario2, senha2);
+        dao.delete(usu2);
         user = dao.selectFrom("C");
         assertEquals(user.size(), 0);
     }
 
     @Test
     public void testUsuarioDeleteIncorreto() throws SQLException {
-        String sqlinsert = "INSERT INTO login(user, password) VALUES('C', '789')";
-        PreparedStatement ps = conexao.prepareStatement(sqlinsert);
-        ps.executeUpdate(sqlinsert);
+        String usuario = "C";
+        String senha = "789";
+        Usuario usu = new Usuario(usuario, senha);
+        dao.insert(usu);
         List<Usuario> user = dao.select();
 
         assertEquals(user.get(2).getUser(), "C");
 
-        String sqldelete = "DELETE FROM login WHERE user = 'C'";
-        ps.executeUpdate(sqldelete);
+        String usuario2 = "C";
+        String senha2 = "789";
+        Usuario usu2 = new Usuario(usuario2, senha2);
+        dao.delete(usu2);
         user = dao.selectFrom("C");
         assertNotEquals(user.size(), 1);
     }
 
     @After
     public void after() throws SQLException {
-        String sqllivrodelete = "DELETE FROM login WHERE user = 'A'";
-        String sqllivrodelete02 = "DELETE FROM login WHERE user = 'B'";
-        PreparedStatement ps = conexao.prepareStatement(sqllivrodelete);
-        ps.executeUpdate(sqllivrodelete);
-        ps.executeUpdate(sqllivrodelete02);
+        String usuario2 = "A";
+        String senha2 = "456";
+        Usuario usu2 = new Usuario(usuario2, senha2);
+        dao.delete(usu2);
+        usuario2 = "B";
+        senha2 = "123";
+        usu2 = new Usuario(usuario2, senha2);
+        dao.delete(usu2);
     }
 }
