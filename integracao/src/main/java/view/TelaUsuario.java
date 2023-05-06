@@ -60,7 +60,7 @@ public class TelaUsuario extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE);
 
         jLabel4.setForeground(new java.awt.Color(255, 0, 51));
         jLabel4.setText("*");
