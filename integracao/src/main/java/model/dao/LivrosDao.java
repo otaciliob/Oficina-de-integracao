@@ -56,7 +56,7 @@ public class LivrosDao {
 
     public boolean emprestimo(int id, int funcao) {
         try {
-            if (funcao > 1) {
+            if (funcao > 0) {
                 stmt = con.prepareStatement(sqlemprestado);
                 stmt.setInt(1, id);
             } else {
