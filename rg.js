@@ -14,3 +14,4 @@ var mod = validar() % 11;
 console.log(mod)
 
 console.log(11 - mod)
+// gerador de RG: https://www.4devs.com.br/gerador_de_rg
