@@ -10,11 +10,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.beans.Leitor;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 public class LeitorDao extends GenericDao {
+    
+    private Connection con = null;
 
+    public LeitorDao(String teste) {
+        con = ConnectionFactory.getConnection(teste);
+    }
+
+    public LeitorDao() {
+        con = ConnectionFactory.getConnection();
+    }
+
+    public static boolean emailCheck(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
+    }
+    
     public void create(Leitor l) {
-        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
 
         try {
@@ -34,7 +56,6 @@ public class LeitorDao extends GenericDao {
     }
 
     public List<Leitor> read() {
-        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Leitor> leitores = new ArrayList<>();
@@ -60,7 +81,6 @@ public class LeitorDao extends GenericDao {
     }
     
     public List<Leitor> readFor(String nome) {
-        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Leitor> leitores = new ArrayList<>();
@@ -88,7 +108,6 @@ public class LeitorDao extends GenericDao {
     }
     
     public List<Leitor> readFor(int rg) {
-        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         List<Leitor> leitores = new ArrayList<>();
@@ -116,7 +135,6 @@ public class LeitorDao extends GenericDao {
     }
     
     public void update(Leitor l,int rg) {
-        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         
@@ -141,7 +159,6 @@ public class LeitorDao extends GenericDao {
     }
     
     public void delete(Leitor l) {
-        Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         

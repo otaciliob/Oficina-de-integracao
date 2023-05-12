@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: dao.TelaUsuarioTest
+Test set: dao.TelaLeitorTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.149 sec
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.797 sec

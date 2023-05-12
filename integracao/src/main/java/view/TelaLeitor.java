@@ -5,6 +5,7 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import model.beans.Leitor;
@@ -180,7 +181,7 @@ public class TelaLeitor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        if (!(txtRg.getText().isEmpty()) && !(txtNome.getText().isEmpty())) {
+        if (!(txtRg.getText().isEmpty()) && !(txtNome.getText().isEmpty()) && (dao.emailCheck(txtEmail.getText()))) {
             dao.create(new Leitor(
                     Integer.parseInt(txtRg.getText()),
                     txtNome.getText(),
@@ -190,6 +191,8 @@ public class TelaLeitor extends javax.swing.JFrame {
             txtRg.setText("");
             txtNome.setText("");
             txtEmail.setText("");
+        } else {
+            JOptionPane.showMessageDialog(null, "Preencha os campos corretamente!", "Aviso", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
