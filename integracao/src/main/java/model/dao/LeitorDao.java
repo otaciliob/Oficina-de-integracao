@@ -10,9 +10,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.beans.Leitor;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 public class LeitorDao extends GenericDao {
 
+    public static boolean emailCheck(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
+    }
+    
     public void create(Leitor l) {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
