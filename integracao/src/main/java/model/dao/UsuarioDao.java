@@ -34,15 +34,20 @@ public class UsuarioDao {
     }
 
     public boolean insert(Usuario usu) {
-        try {
-            stmt = con.prepareStatement(sqlinsert);
-            stmt.setString(1, usu.getUser());
-            stmt.setString(2, usu.getPassword());
-            GenericDao.create(stmt, con);
-            return true;
-        } catch (SQLException ex) {
-            Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
+        if (usu.validatePassword(usu.getPassword())) {
+            try {
+                stmt = con.prepareStatement(sqlinsert);
+                stmt.setString(1, usu.getUser());
+                stmt.setString(2, usu.getPassword());
+                GenericDao.create(stmt, con);
+                return true;
+            } catch (SQLException ex) {
+                Logger.getLogger(UsuarioDao.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
+                return false;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Senha muito fraca ");
             return false;
         }
 
