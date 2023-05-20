@@ -28,4 +28,8 @@ public class Usuario {
     public void setPassword(String password) {
         this.password = password;
     }
+    public boolean validatePassword(String senha){
+        return PasswordValidator.validatePassword(senha); 
+    }
+    
 }
