@@ -22,13 +22,29 @@ public class TelaUsuarioTest {
     @Before
     public void setup() throws SQLException {
         String usuario = "A";
-        String senha = "456";
+        String senha = "789!";
         Usuario usu = new Usuario(usuario, senha);
         dao.insert(usu);
         usuario = "B";
-        senha = "123";
+        senha = "123!";
         usu = new Usuario(usuario, senha);
         dao.insert(usu);
+    }
+
+    @Test
+    public void testValidatePassword_WithSpecialChars() {
+        String password = "MinhaSenha@123";
+        Usuario usu = new Usuario();
+        boolean result = usu.validatePassword(password);
+        assertTrue(result);
+    }
+
+    @Test
+    public void testValidatePassword_WithoutSpecialChars() {
+        String password = "MinhaSenha123";
+        Usuario usu = new Usuario();
+        boolean result = usu.validatePassword(password);
+        assertFalse(result);
     }
 
     @Test
@@ -43,7 +59,7 @@ public class TelaUsuarioTest {
         List<Usuario> user = dao.selectFrom("A");
 
         assertEquals(user.get(0).getUser(), "A");
-        assertEquals(user.get(0).getPassword(), "456");
+        assertEquals(user.get(0).getPassword(), "789!");
     }
 
     @Test
@@ -51,7 +67,7 @@ public class TelaUsuarioTest {
         List<Usuario> user = dao.selectFrom("B");
 
         assertNotEquals(user.get(0).getUser(), "A");
-        assertNotEquals(user.get(0).getPassword(), "456");
+        assertNotEquals(user.get(0).getPassword(), "789!");
     }
 
     @Test
@@ -59,7 +75,7 @@ public class TelaUsuarioTest {
         List<Usuario> user = dao.select();
         System.out.println(user.get(0).getUser());
         assertEquals(user.get(0).getUser(), "A");
-        assertEquals(user.get(0).getPassword(), "456");
+        assertEquals(user.get(0).getPassword(), "789!");
     }
 
     @Test
@@ -67,7 +83,7 @@ public class TelaUsuarioTest {
         List<Usuario> user = dao.select();
 
         assertNotEquals(user.get(0).getUser(), "B");
-        assertNotEquals(user.get(0).getPassword(), "123");
+        assertNotEquals(user.get(0).getPassword(), "123!");
     }
 
     @Test
@@ -75,7 +91,7 @@ public class TelaUsuarioTest {
         List<Usuario> user = dao.select();
 
         assertEquals(user.get(1).getUser(), "B");
-        assertEquals(user.get(1).getPassword(), "123");
+        assertEquals(user.get(1).getPassword(), "123!");
     }
 
     @Test
@@ -83,13 +99,13 @@ public class TelaUsuarioTest {
         List<Usuario> user = dao.select();
 
         assertNotEquals(user.get(1).getUser(), "A");
-        assertNotEquals(user.get(1).getPassword(), "456");
+        assertNotEquals(user.get(1).getPassword(), "789!");
     }
 
     @Test
     public void testUsuarioDeleteCorreto() throws SQLException {
         String usuario = "C";
-        String senha = "789";
+        String senha = "789!";
         Usuario usu = new Usuario(usuario, senha);
         dao.insert(usu);
         List<Usuario> user = dao.select();
@@ -97,7 +113,7 @@ public class TelaUsuarioTest {
         assertEquals(user.get(2).getUser(), "C");
 
         String usuario2 = "C";
-        String senha2 = "789";
+        String senha2 = "789!";
         Usuario usu2 = new Usuario(usuario2, senha2);
         dao.delete(usu2);
         user = dao.selectFrom("C");
@@ -107,7 +123,7 @@ public class TelaUsuarioTest {
     @Test
     public void testUsuarioDeleteIncorreto() throws SQLException {
         String usuario = "C";
-        String senha = "789";
+        String senha = "789!";
         Usuario usu = new Usuario(usuario, senha);
         dao.insert(usu);
         List<Usuario> user = dao.select();
@@ -115,7 +131,7 @@ public class TelaUsuarioTest {
         assertEquals(user.get(2).getUser(), "C");
 
         String usuario2 = "C";
-        String senha2 = "789";
+        String senha2 = "789!";
         Usuario usu2 = new Usuario(usuario2, senha2);
         dao.delete(usu2);
         user = dao.selectFrom("C");
@@ -125,11 +141,11 @@ public class TelaUsuarioTest {
     @After
     public void after() throws SQLException {
         String usuario2 = "A";
-        String senha2 = "456";
+        String senha2 = "789!";
         Usuario usu2 = new Usuario(usuario2, senha2);
         dao.delete(usu2);
         usuario2 = "B";
-        senha2 = "123";
+        senha2 = "123!";
         usu2 = new Usuario(usuario2, senha2);
         dao.delete(usu2);
     }
