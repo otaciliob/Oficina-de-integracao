@@ -13,7 +13,7 @@ import model.dao.ConnectionFactory;
 
 /**
  *
- * @author D-JTP
+ * @author D-JTP,Otaciliob
  */
 public class TelaLeitorTest {
 
@@ -21,6 +21,39 @@ public class TelaLeitorTest {
     private static final String url = "jdbc:mysql://localhost:3306/teste";
     LeitorDao dao = new LeitorDao(url);
     
+    //410670327 RG correto
+    @Test
+    public void testRGCorreto(){
+        conexao = ConnectionFactory.getConnection(url);
+        if (dao.validarRG(410670327)) {
+            dao.create(new Leitor(
+                410670327,
+                "'Otacilio'",
+                "e-mail@mail.com")
+            );
+        }
+        for (Leitor l : dao.readFor(410670327)) {
+            assertEquals(l.getRg(), 410670327);
+        }
+        String sqldeletelei = "DELETE FROM leitor WHERE leitor_rg = 410670327";
+        PreparedStatement ps = conexao.prepareStatement(sqldeletelei);
+        ps.executeUpdate(sqldeletelei);
+    }
+
+    @Test
+    public void testRGIncorreto(){
+        conexao = ConnectionFactory.getConnection(url);
+        if (dao.validarRG(410670320)) {
+            dao.create(new Leitor(
+                410670320,
+                "'Otacilio'",
+                "e-mail@mail.com")
+            );
+        }
+        for (Leitor l : dao.readFor(410670320)) {
+            assertNotEquals(l.getRg(), 410670320);
+        }
+    }
 
     @Test
     public void testEmailCorreto() throws SQLException{
