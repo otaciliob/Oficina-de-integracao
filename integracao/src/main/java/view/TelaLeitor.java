@@ -181,7 +181,7 @@ public class TelaLeitor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        if (!(txtRg.getText().isEmpty()) && !(txtNome.getText().isEmpty()) && (dao.emailCheck(txtEmail.getText()))) {
+        if (!(txtRg.getText().isEmpty()) && !(txtNome.getText().isEmpty()) && (dao.validarRG(txtRg.getText())) && (dao.emailCheck(txtEmail.getText()))) {
             dao.create(new Leitor(
                     Integer.parseInt(txtRg.getText()),
                     txtNome.getText(),
