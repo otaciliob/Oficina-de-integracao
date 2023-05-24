@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import model.beans.Leitor;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import control.Validator;
 
 public class LeitorDao extends GenericDao {
 
@@ -34,6 +35,12 @@ public class LeitorDao extends GenericDao {
             result = false;
         }
         return result;
+    }
+    public static boolean validarRG(int rg){
+        return Validator.validateRG(String.valueOf(rg));
+    }
+    public static boolean validarRG(String rg){
+        return Validator.validateRG(rg);
     }
 
     public void create(Leitor l) {
