@@ -1,5 +1,7 @@
 package model.beans;
 
+import control.Validator;
+
 public class Usuario {
 
     private String user;
@@ -29,7 +31,7 @@ public class Usuario {
         this.password = password;
     }
     public boolean validatePassword(String senha){
-        return PasswordValidator.validatePassword(senha); 
+        return Validator.validatePassword(senha); 
     }
     
 }

@@ -1,5 +1,7 @@
 package model.beans;
 
+import control.Validator;
+
 public class Leitor {
     
     private int rg;
@@ -37,6 +39,10 @@ public class Leitor {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+    
+    public boolean validateRG(int rg){
+        return Validator.validateRG(String.valueOf(rg));
     }
     
     
