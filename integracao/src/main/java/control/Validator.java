@@ -30,6 +30,7 @@ public class Validator {
         //lenght 9
         int[] matriz = {0, 0, 0, 0, 0, 0, 0, 0, 0};
         int result = 0;
+        try {
         for (int i = 0; i < 8; i++) {
 
             matriz[i] = Integer.parseInt(String.valueOf(rg.charAt(i)));
@@ -39,7 +40,11 @@ public class Validator {
         result = 11 - Integer.remainderUnsigned(result, 11);
         System.out.println(result);
 
+
         return result == Integer.parseInt(String.valueOf(rg.charAt(8)));
+        } catch(StringIndexOutOfBoundsException e) {
+            return false;
+        }
 
     }
 

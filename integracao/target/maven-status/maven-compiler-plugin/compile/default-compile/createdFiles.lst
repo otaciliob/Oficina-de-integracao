@@ -54,6 +54,7 @@ view\TelaLeitor$2.class
 view\TelaLivro$8.class
 view\TelaEmprestimo$2.class
 model\beans\Leitor.class
+control\Validator.class
 model\beans\Emprestimo.class
 view\TelaUsuario$2.class
 view\TelaLeitor$5.class

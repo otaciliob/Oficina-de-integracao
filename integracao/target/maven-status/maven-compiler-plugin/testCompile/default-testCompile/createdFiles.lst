@@ -1,4 +1,5 @@
 dao\TelaEmprestimoTest.class
+dao\TelaLeitorTest.class
 dao\TelaLivroTest.class
 dao\TelaUsuarioTest.class
 dao\TelaLoginTest.class

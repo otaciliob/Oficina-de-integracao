@@ -25,19 +25,17 @@ public class TelaLeitorTest {
     @Test
     public void testRGCorreto(){
         conexao = ConnectionFactory.getConnection(url);
-        if (dao.validarRG(410670327)) {
-            dao.create(new Leitor(
+        Leitor lei = new Leitor(
                 410670327,
                 "'Otacilio'",
-                "e-mail@mail.com")
-            );
+                "e-mail@mail.com");
+        if (dao.validarRG(410670327)) {
+            dao.create(lei);
         }
         for (Leitor l : dao.readFor(410670327)) {
             assertEquals(l.getRg(), 410670327);
         }
-        String sqldeletelei = "DELETE FROM leitor WHERE leitor_rg = 410670327";
-        PreparedStatement ps = conexao.prepareStatement(sqldeletelei);
-        ps.executeUpdate(sqldeletelei);
+        dao.delete(lei);
     }
 
     @Test
@@ -60,7 +58,7 @@ public class TelaLeitorTest {
         conexao = ConnectionFactory.getConnection(url);
         if (dao.emailCheck("e-mail@e-mail.com")) {
             dao.create(new Leitor(
-                1,
+                410670327,
                 "'João'",
                 "e-mail@e-mail.com")
             );
@@ -79,7 +77,7 @@ public class TelaLeitorTest {
         conexao = ConnectionFactory.getConnection(url);
         if (dao.emailCheck("e-mail2")) {
             dao.create(new Leitor(
-                2,
+                410670327,
                 "'Maria'",
                 "e-mail2")
             );

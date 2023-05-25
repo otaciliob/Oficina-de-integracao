@@ -26,7 +26,7 @@ public class LeitorDao extends GenericDao {
         con = ConnectionFactory.getConnection();
     }
 
-    public static boolean emailCheck(String email) {
+    public boolean emailCheck(String email) {
         boolean result = true;
         try {
             InternetAddress emailAddr = new InternetAddress(email);
@@ -45,7 +45,7 @@ public class LeitorDao extends GenericDao {
 
     public void create(Leitor l) {
         PreparedStatement stmt = null;
-        if (l.validateRG(l.getRg())) {
+        if (validarRG(l.getRg())) {
             try {
                 stmt = con.prepareStatement("INSERT INTO Leitor(leitor_rg,leitor_nome,leitor_email) VALUES(?,?,?) ");
                 stmt.setInt(1, l.getRg());
@@ -56,8 +56,6 @@ public class LeitorDao extends GenericDao {
             } catch (SQLException ex) {
                 Logger.getLogger(LeitorDao.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-            } finally {
-                ConnectionFactory.closeConnection(con, stmt);
             }
         }else{
             JOptionPane.showMessageDialog(null, "RG invalido " );
@@ -84,8 +82,6 @@ public class LeitorDao extends GenericDao {
         } catch (SQLException ex) {
             Logger.getLogger(LeitorDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return leitores;
     }
@@ -111,8 +107,6 @@ public class LeitorDao extends GenericDao {
         } catch (SQLException ex) {
             Logger.getLogger(LeitorDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return leitores;
     }
@@ -138,8 +132,6 @@ public class LeitorDao extends GenericDao {
         } catch (SQLException ex) {
             Logger.getLogger(LeitorDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
         return leitores;
     }
@@ -162,15 +154,12 @@ public class LeitorDao extends GenericDao {
         } catch (SQLException ex) {
             Logger.getLogger(LeitorDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao salvar " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
 
     }
 
     public void delete(Leitor l) {
         PreparedStatement stmt = null;
-        ResultSet rs = null;
 
         try {
             stmt = con.prepareStatement(
@@ -182,8 +171,6 @@ public class LeitorDao extends GenericDao {
         } catch (SQLException ex) {
             Logger.getLogger(LeitorDao.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(null, "Erro ao excluir " + ex);
-        } finally {
-            ConnectionFactory.closeConnection(con, stmt);
         }
 
     }
