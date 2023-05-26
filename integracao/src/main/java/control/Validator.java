@@ -15,15 +15,12 @@ public class Validator {
         /*String password = "MinhaSenha@123";
         boolean hasSpecialChars = validatePassword(password);
         System.out.println("A senha contém caracteres especiais? " + hasSpecialChars);
-        System.out.println(validateRG("410670327"));*/
+        System.out.println(validateRG("410670327"));
         String date = "01/06/2023";
-        
         System.out.println(f.format(LocalDate.now()));
-        //System.out.println(LocalDate.parse(date, f));
+        System.out.println(LocalDate.parse(date, f));
         System.out.println(LocalDate.now());
-        //System.out.println(validateDate(date));
-
-
+        System.out.println(validateDate(date));*/
     }
     /*
         Verifica se uma data e valida
@@ -33,7 +30,9 @@ public class Validator {
         LocalDate before = LocalDate.parse( data, f);
         return before.isAfter(LocalDate.now());
     }
-
+    /* Verifica se uma senha e valida
+        senha sera valida se o retorno for verdadeiro (True)
+    */
     public static boolean validatePassword(String password) {
         String specialChars = "!@#$%^&*_=+-/.,";
 
@@ -46,7 +45,9 @@ public class Validator {
 
         return false;
     }
-
+    /* Verifica se um RG e valido
+        RG sera valido se o retorno for verdadeiro (True)
+    */
     public static boolean validateRG(String rg) {
         //lenght 9
         int[] matriz = {0, 0, 0, 0, 0, 0, 0, 0, 0};
