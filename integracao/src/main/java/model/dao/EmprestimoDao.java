@@ -25,6 +25,15 @@ public class EmprestimoDao {
     /* private static final String restricao1 = "SELECT count(leitor_rg) FROM emprestimo WHERE leitor_rg = ?";
     String para ser usa no stmt da ISSUE #7, count nao pode ser maior igual a 3
      */
+    private Connection con = null;
+    
+    public EmprestimoDao(String teste) {
+        con = ConnectionFactory.getConnection(teste);
+    }
+
+    public EmprestimoDao() {
+        con = ConnectionFactory.getConnection();
+    }
     public boolean create(Emprestimo l) {
         PreparedStatement stmt = null;
 
@@ -43,15 +52,6 @@ public class EmprestimoDao {
         } else {
             return false;
         }
-    }
-    private Connection con = null;
-
-    public EmprestimoDao(String teste) {
-        con = ConnectionFactory.getConnection(teste);
-    }
-
-    public EmprestimoDao() {
-        con = ConnectionFactory.getConnection();
     }
 
     public List<Emprestimo> read() {
@@ -157,7 +157,21 @@ public class EmprestimoDao {
             Logger.getLogger(EmprestimoDao.class.getName()).log(Level.SEVERE, null, ex);
             pode = false;
         }
-
         return pode;
     }
+    public boolean restricao2(int rg){
+        //Impedir que leitores com empréstimos atrasados façam novos empréstimos
+        boolean pode = false;
+        for (Emprestimo emp : readFor(rg)) {
+            if(!Validator.validateDate(emp.getData_devolucao().toString())){
+                pode = true;
+            }
+        }
+        return pode;
+    }
+
+    public boolean validarData(String data){
+        return Validator.validateDate(data);
+    }
+    
 }
