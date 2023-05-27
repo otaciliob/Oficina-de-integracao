@@ -307,7 +307,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {                                             
         Emprestimo emp = carregaEmprestimo();
 
-        if (dao2.consultaUnidades(Integer.valueOf(comboLivro())) <= 0) {
+        if (dao2.consultaUnidades(Integer.valueOf(comboLivro())) <= 0 || !(dao3.validarData(txtEmpData.getText()))) {
             JOptionPane.showMessageDialog(null, "Erro");
         } else {
             if (comboLivro() == null || comboLeitor() == null) {
@@ -409,8 +409,18 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private void setar_campos() {
         int setar = tblEmprestimos.getSelectedRow();
         // TODO Fazer o setar funcionar nos combobox
-        cmbLeitor.setSelectedItem(tblEmprestimos.getModel().getValueAt(setar, 0).toString());
-        cmbLivro.setSelectedItem(tblEmprestimos.getModel().getValueAt(setar, 1).toString());
+        String leitor = tblEmprestimos.getModel().getValueAt(setar, 1).toString();
+        String livro = tblEmprestimos.getModel().getValueAt(setar, 0).toString();
+        for(int i = 1; i < cmbLeitor.getItemCount();i++){
+            if( cmbLeitor.getItemAt(i).toString().contains(leitor) ){
+                cmbLeitor.setSelectedIndex(i);break;
+            }
+        }
+        for(int i = 1; i < cmbLivro.getItemCount();i++){
+            if( cmbLivro.getItemAt(i).toString().contains(livro) ){
+                cmbLivro.setSelectedIndex(i);break;
+            }
+        }
         try {
             String ds1 = tblEmprestimos.getModel().getValueAt(setar, 2).toString();
             SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
