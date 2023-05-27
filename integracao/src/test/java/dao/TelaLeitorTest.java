@@ -58,7 +58,7 @@ public class TelaLeitorTest {
         conexao = ConnectionFactory.getConnection(url);
         if (dao.emailCheck("e-mail@e-mail.com")) {
             dao.create(new Leitor(
-                410670327,
+                1,
                 "'João'",
                 "e-mail@e-mail.com")
             );
