@@ -22,6 +22,7 @@ public class LivrosDao {
     private static final String sqlinsert = "INSERT INTO livro(livro_nome, livro_autor, livro_ano, livro_unidades) VALUES(?,?,?,?)";
     private static final String sqlselect = "SELECT * FROM livro";
     private static final String sqlselectfrom = "SELECT * FROM livro WHERE livro_nome LIKE ?";
+    private static final String sqlselectfrom2 = "SELECT * FROM livro WHERE livro_id = ?";
     private static final String sqlupdate = "UPDATE livro SET livro_nome = ?, livro_autor = ?, livro_ano = ?, livro_unidades = ? WHERE livro_id = ?";
     private static final String sqldelete = "DELETE FROM livro WHERE livro_id = ?";
     private static final String sqlemprestado = "UPDATE livro SET livro_unidades = livro_unidades - 1 WHERE livro_id = ?";
@@ -120,6 +121,31 @@ public class LivrosDao {
         try {
             stmt = con.prepareStatement(sqlselectfrom);
             stmt.setString(1, "%" + titulo + "%");
+
+            rs = GenericDao.read(stmt, con);
+            while (rs.next()) {
+                Livros l = new Livros(
+                        rs.getInt("livro_id"),
+                        rs.getString("livro_nome"),
+                        rs.getString("livro_autor"),
+                        rs.getInt("livro_ano"),
+                        rs.getInt("livro_unidades")
+                );
+                book.add(l);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(LivrosDao.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return book;
+    }
+    
+    public List<Livros> selectFrom(int id) {
+        List<Livros> book = new ArrayList<>();
+
+        try {
+            stmt = con.prepareStatement(sqlselectfrom2);
+            stmt.setInt(1, id);
 
             rs = GenericDao.read(stmt, con);
             while (rs.next()) {
