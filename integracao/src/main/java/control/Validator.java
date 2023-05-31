@@ -2,6 +2,7 @@ package control;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import model.dao.EmprestimoDao;
 
 /**
  * @author Aluno
@@ -21,14 +22,23 @@ public class Validator {
         System.out.println(LocalDate.parse(date, f));
         System.out.println(LocalDate.now());
         System.out.println(validateDate(date));*/
+        EmprestimoDao Dao = new EmprestimoDao();
+        
+        System.out.println(Dao.restricao2(116743815));
+        
     }
     /*
         Verifica se uma data e valida
         data sera valida se o retorno for verdadeiro-(True)
     */
     public static boolean validateDate(String data){
-        LocalDate before = LocalDate.parse( data, f);
-        return before.isAfter(LocalDate.now());
+        LocalDate depois = LocalDate.parse( data, f);
+        return depois.isAfter(LocalDate.now());
+        //retorna true se a data recebida via paramentro vem depois da data atual
+    }
+    public static boolean validateDate(LocalDate data){
+        return data.isAfter(LocalDate.now());
+        //retorna true se a data recebida via paramentro vem depois da data atual
     }
     /* Verifica se uma senha e valida
         senha sera valida se o retorno for verdadeiro (True)

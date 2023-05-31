@@ -160,12 +160,17 @@ public class EmprestimoDao {
         }
         return pode;
     }
+    
+    /* recebe um RG via paramentro
+        procura por todos os emprestimos que possuem este RG
+        verifica se a data de um dos emprestimos registrados esta atrasada
+    */
     public boolean restricao2(int rg){
         //Impedir que leitores com empréstimos atrasados façam novos empréstimos
-        boolean pode = false;
+        boolean pode = true;
         for (Emprestimo emp : readFor(rg)) {
-            if(!Validator.validateDate(emp.getData_devolucao().toString())){
-                pode = true;
+            if(!Validator.validateDate(emp.getData_devolucao().toLocalDate())){
+                pode = false;
             }
         }
         return pode;

@@ -307,7 +307,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private void btnAdicionarActionPerformed(java.awt.event.ActionEvent evt) {                                             
         Emprestimo emp = carregaEmprestimo();
 
-        if (dao2.consultaUnidades(Integer.valueOf(comboLivro())) <= 0 || !(dao3.validarData(txtEmpData.getText()))) {
+        if (dao2.consultaUnidades(Integer.valueOf(comboLivro())) <= 0 || !(dao3.restricao2(Integer.parseInt(comboLeitor()))) || !(dao3.validarData(txtEmpData.getText()))) {
             JOptionPane.showMessageDialog(null, "Erro");
         } else {
             if (comboLivro() == null || comboLeitor() == null) {
