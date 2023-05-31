@@ -410,7 +410,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         int setar = tblEmprestimos.getSelectedRow();
         // TODO Fazer o setar funcionar nos combobox
         String leitor = tblEmprestimos.getModel().getValueAt(setar, 1).toString();
-        String livro = tblEmprestimos.getModel().getValueAt(setar, 0).toString();
+        String livro = "ID: " + tblEmprestimos.getModel().getValueAt(setar, 0).toString();
         for(int i = 1; i < cmbLeitor.getItemCount();i++){
             if( cmbLeitor.getItemAt(i).toString().contains(leitor) ){
                 cmbLeitor.setSelectedIndex(i);break;
