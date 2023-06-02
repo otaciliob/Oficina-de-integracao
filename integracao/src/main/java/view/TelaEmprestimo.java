@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,6 +59,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         txtEmpData = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -77,6 +79,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         btnAdicionar = new javax.swing.JButton();
         btnAlterar = new javax.swing.JButton();
+        jDateChooser2 = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Empréstimo");
@@ -85,8 +88,10 @@ public class TelaEmprestimo extends javax.swing.JFrame {
 
         jLabel11.setText("Pesquisar por RG:");
 
-        jLabel7.setForeground(new java.awt.Color(255, 0, 51));
-        jLabel7.setText("formato: dd/MM/yyyy");
+        jLabel7.setForeground(new java.awt.Color(250, 250, 40));
+        jLabel7.setToolTipText("");
+        jLabel7.setMaximumSize(new java.awt.Dimension(10, 10));
+        jLabel7.setMinimumSize(new java.awt.Dimension(10, 10));
 
         jLabel5.setForeground(new java.awt.Color(255, 0, 51));
         jLabel5.setText("*");
@@ -194,6 +199,13 @@ public class TelaEmprestimo extends javax.swing.JFrame {
             }
         });
 
+        jDateChooser2.setDateFormatString("dd/MM/yyyy");
+        jDateChooser2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser2PropertyChange(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -216,35 +228,41 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txtEmpPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(107, 107, 107)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(107, 107, 107)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbLivro, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(101, 101, 101)
                                 .addComponent(jLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(cmbLeitor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel5)
-                            .addComponent(jLabel4))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel4))
+                        .addGap(15, 15, 15))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(txtEmpPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(234, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(89, Short.MAX_VALUE)
                 .addComponent(jLabel9)
                 .addGap(123, 123, 123))
         );
@@ -254,31 +272,37 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel4))
-                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cmbLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGap(10, 10, 10))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbLeitor, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(14, 14, 14)
                         .addComponent(jLabel3))
-                    .addComponent(txtEmpData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEmpData)
+                    .addComponent(jDateChooser2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7))
-                    .addComponent(jLabel6))
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEmpPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11))
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
@@ -306,7 +330,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         if (confirma == JOptionPane.YES_OPTION) {
             if (dao3.delete(emp)) {
                 JOptionPane.showMessageDialog(null, "Livro excluído com sucesso");
-                dao2.emprestimo(Integer.valueOf(comboLivro()),0);
+                dao2.emprestimo(Integer.valueOf(comboLivro()), 0);
                 zerar();
             } else {
                 JOptionPane.showMessageDialog(null, "Erro");
@@ -334,7 +358,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
                 try {
                     if (dao3.create(emp)) {
                         JOptionPane.showMessageDialog(null, "Dados alterados com sucesso");
-                        dao2.emprestimo(Integer.valueOf(comboLivro()),1);
+                        dao2.emprestimo(Integer.valueOf(comboLivro()), 1);
                         zerar();
                     } else {
                         JOptionPane.showMessageDialog(null, "Erro");
@@ -360,7 +384,15 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAlterarActionPerformed
 
-        public void zerar() {
+    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        if (!(jDateChooser2.getDate() == null)) {
+            txtEmpData.setText(df.format(jDateChooser2.getDate()));
+        }
+
+    }//GEN-LAST:event_jDateChooser2PropertyChange
+
+    public void zerar() {
         DefaultTableModel modelo = (DefaultTableModel) tblEmprestimos.getModel();
         modelo.setNumRows(0);
         cmbLeitor.setSelectedIndex(0);
@@ -369,15 +401,13 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         for (Emprestimo emp : dao3.read()) {
             List<Leitor> lei = dao.readFor(emp.getLeitor_rg());
             List<Livros> liv = dao2.selectFrom(emp.getLivro_id());
-            
+
             modelo.addRow(new Object[]{
                 emp.getLivro_id(),
                 emp.getLeitor_rg(),
                 emp.getData_devolucao(),
                 lei.get(0).getNome(),
-                liv.get(0).getNome(),
-                
-            });
+                liv.get(0).getNome(),});
         }
     }
 
@@ -410,17 +440,17 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         int setar = tblEmprestimos.getSelectedRow();
         // TO-DO Fazer o setar funcionar nos combobox
         String leitor = tblEmprestimos.getModel().getValueAt(setar, 1).toString();
-        String livro =  "ID: " + tblEmprestimos.getModel().getValueAt(setar, 0).toString();
-        System.out.println(livro + "(oque procuro) ");
-        for(int i = 1; i < cmbLeitor.getItemCount();i++){
-            if( cmbLeitor.getItemAt(i).toString().contains(leitor) ){
-                cmbLeitor.setSelectedIndex(i);break;
+        String livro = "ID: " + tblEmprestimos.getModel().getValueAt(setar, 0).toString();
+        for (int i = 1; i < cmbLeitor.getItemCount(); i++) {
+            if (cmbLeitor.getItemAt(i).toString().contains(leitor)) {
+                cmbLeitor.setSelectedIndex(i);
+                break;
             }
         }
-        for(int i = 1; i < cmbLivro.getItemCount();i++){
-            if( cmbLivro.getItemAt(i).toString().contains(livro) ){
-                System.out.println(cmbLivro.getItemAt(i).toString()+" (oque achei)");
-                cmbLivro.setSelectedIndex(i);break;
+        for (int i = 1; i < cmbLivro.getItemCount(); i++) {
+            if (cmbLivro.getItemAt(i).toString().contains(livro)) {
+                cmbLivro.setSelectedIndex(i);
+                break;
             }
         }
         try {
@@ -452,6 +482,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
             int rg = Integer.valueOf(comboLeitor());
             Date date = dateFor.parse(txtEmpData.getText());
             java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
             emp = new Emprestimo(id, rg, sqlDate);
         } catch (ParseException | NumberFormatException erro) {
             System.out.println(erro);
@@ -483,7 +514,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         }
         return null;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -526,6 +557,8 @@ public class TelaEmprestimo extends javax.swing.JFrame {
     private javax.swing.JButton btnRemover;
     private javax.swing.JComboBox cmbLeitor;
     private javax.swing.JComboBox cmbLivro;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
+    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
