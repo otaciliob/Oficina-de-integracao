@@ -398,6 +398,7 @@ public class TelaEmprestimo extends javax.swing.JFrame {
         cmbLeitor.setSelectedIndex(0);
         cmbLivro.setSelectedIndex(0);
         txtEmpData.setText(null);
+        jDateChooser2.setDate(null);
         for (Emprestimo emp : dao3.read()) {
             List<Leitor> lei = dao.readFor(emp.getLeitor_rg());
             List<Livros> liv = dao2.selectFrom(emp.getLivro_id());

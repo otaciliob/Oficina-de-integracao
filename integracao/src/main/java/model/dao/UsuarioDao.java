@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 import model.beans.Usuario;
+import control.Validator;
 
 public class UsuarioDao {
 
@@ -38,7 +39,7 @@ public class UsuarioDao {
             try {
                 stmt = con.prepareStatement(sqlinsert);
                 stmt.setString(1, usu.getUser());
-                stmt.setString(2, usu.getPassword());
+                stmt.setString(2, Validator.encrypt(usu.getPassword()));
                 GenericDao.create(stmt, con);
                 return true;
             } catch (SQLException ex) {
@@ -62,7 +63,7 @@ public class UsuarioDao {
             while (rs.next()) {
                 Usuario u = new Usuario(
                         rs.getString("user"),
-                        rs.getString("password")
+                        Validator.decrypt(rs.getString("password"))
                 );
                 users.add(u);
             }
@@ -83,7 +84,7 @@ public class UsuarioDao {
             while (rs.next()) {
                 Usuario u = new Usuario(
                         rs.getString("user"),
-                        rs.getString("password")
+                        Validator.decrypt(rs.getString("password"))
                 );
                 users.add(u);
             }
@@ -98,7 +99,7 @@ public class UsuarioDao {
         if (usu != null) {
             try {
                 stmt = con.prepareStatement(sqlupdate);
-                stmt.setString(1, usu.getPassword());
+                stmt.setString(1, Validator.encrypt(usu.getPassword()));
                 stmt.setString(2, usu.getUser());
 
                 GenericDao.update(stmt, con);

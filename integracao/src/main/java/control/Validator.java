@@ -4,15 +4,16 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 //import model.dao.EmprestimoDao;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Base64;
 
 /**
  * @author Aluno
  */
 public class Validator {
-
+    
+    private static final String SECRET_KEY = "chaveSecreta1234";
     private static final DateTimeFormatter f = DateTimeFormatter.ofPattern("dd/MM/uuuu");
 
     public static void main(String[] args) {
@@ -38,12 +39,13 @@ public class Validator {
             //Logger.getLogger(Validator.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Deu Ruim -|-" + ex);
             }*/
-        try {
-            MessageDigest algorithm = MessageDigest.getInstance("SHA-256");
-            System.out.println(algorithm);
-        } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(Validator.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        String password = "myPassword123";
+
+        String encryptedPassword = encrypt(password);
+        System.out.println("Senha criptografada: " + encryptedPassword);
+
+        String decryptedPassword = decrypt(encryptedPassword);
+        System.out.println("Senha descriptografada: " + decryptedPassword);
     }
 
     /*
@@ -116,6 +118,32 @@ public class Validator {
         String result = gerarHash(recebido);
         System.out.println("hash da mesma string:" + result);
         return (armazenado.equals(result));
+    }
+
+    public static String encrypt(String password) {
+        try {
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptedBytes = cipher.doFinal(password.getBytes());
+            return Base64.getEncoder().encodeToString(encryptedBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String decrypt(String encryptedPassword) {
+        try {
+            SecretKeySpec secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), "AES");
+            Cipher cipher = Cipher.getInstance("AES");
+            cipher.init(Cipher.DECRYPT_MODE, secretKey);
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPassword));
+            return new String(decryptedBytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

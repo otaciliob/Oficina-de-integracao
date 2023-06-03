@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import control.Validator;
 
 /**
  *
@@ -33,7 +34,7 @@ public class LoginDao {
         try {
             pst = conexao.prepareStatement(sqllogin);
             pst.setString(1, user);
-            pst.setString(2, pass);
+            pst.setString(2, Validator.encrypt(pass));
             rs = pst.executeQuery();
             if (rs.next()) {
                 conexao.close();
